@@ -1,0 +1,457 @@
+[
+    {
+        "title": "Phishing Attacks",
+        "content": "Over 90% of data breaches start with phishing attacks.",
+        "fact_url": "https://cybersecurity-insiders.com",
+        "category": "Hacking",
+        "date_created": "2024-10-01"
+    },
+    {
+        "title": "Ransomware Costs",
+        "content": "Global ransomware damages are projected to reach $20 billion by 2021.",
+        "fact_url": "https://cybersecurityventures.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-10-02"
+    },
+    {
+        "title": "Zero-Day Vulnerability",
+        "content": "A zero-day vulnerability is a software flaw discovered by hackers before the vendor is aware.",
+        "fact_url": "https://www.csoonline.com",
+        "category": "Vulnerabilities",
+        "date_created": "2024-10-03"
+    },
+    {
+        "title": "Brute Force Attacks",
+        "content": "Brute force attacks involve attempting many password combinations until the correct one is found.",
+        "fact_url": "https://www.kaspersky.com",
+        "category": "Hacking",
+        "date_created": "2024-10-04"
+    },
+    {
+        "title": "Social Engineering",
+        "content": "Social engineering attacks manipulate individuals into giving away confidential information.",
+        "fact_url": "https://www.exabeam.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-10-05"
+    },
+    {
+        "title": "SSL Encryption",
+        "content": "SSL encryption helps protect data in transit by securing communication between servers and browsers.",
+        "fact_url": "https://www.cloudflare.com",
+        "category": "Encryption",
+        "date_created": "2024-10-06"
+    },
+    {
+        "title": "Malware",
+        "content": "Malware is any software intentionally designed to cause damage to a computer, server, or network.",
+        "fact_url": "https://www.malwarebytes.com",
+        "category": "Malware",
+        "date_created": "2024-10-07"
+    },
+    {
+        "title": "Firewall Protection",
+        "content": "A firewall acts as a barrier between a trusted network and an untrusted one, filtering traffic.",
+        "fact_url": "https://www.cisco.com",
+        "category": "Firewalls",
+        "date_created": "2024-10-08"
+    },
+    {
+        "title": "Patch Management",
+        "content": "Keeping software updated with the latest patches is crucial to avoid exploitation of vulnerabilities.",
+        "fact_url": "https://www.microsoft.com",
+        "category": "Best Practices",
+        "date_created": "2024-10-09"
+    },
+    {
+        "title": "Insider Threats",
+        "content": "Insider threats can come from employees misusing access to sensitive data, often leading to breaches.",
+        "fact_url": "https://www.varonis.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-10-10"
+    },
+    {
+        "title": "Password Best Practices",
+        "content": "Passwords should be long, unique, and include a mix of letters, numbers, and symbols.",
+        "fact_url": "https://www.nist.gov",
+        "category": "Best Practices",
+        "date_created": "2024-10-11"
+    },
+    {
+        "title": "Two-Factor Authentication",
+        "content": "Two-factor authentication adds an extra layer of security by requiring a second form of identification.",
+        "fact_url": "https://www.duosecurity.com",
+        "category": "Authentication",
+        "date_created": "2024-10-12"
+    },
+    {
+        "title": "Public Wi-Fi Dangers",
+        "content": "Using public Wi-Fi networks can expose your data to potential attacks without proper encryption.",
+        "fact_url": "https://www.norton.com",
+        "category": "Network Security",
+        "date_created": "2024-10-13"
+    },
+    {
+        "title": "VPN Use",
+        "content": "A Virtual Private Network (VPN) secures your internet connection, especially on untrusted networks.",
+        "fact_url": "https://www.expressvpn.com",
+        "category": "Encryption",
+        "date_created": "2024-10-14"
+    },
+    {
+        "title": "SQL Injection",
+        "content": "SQL Injection attacks involve inserting malicious SQL code into an entry field for execution by a backend database.",
+        "fact_url": "https://owasp.org",
+        "category": "Hacking",
+        "date_created": "2024-10-15"
+    },
+    {
+        "title": "Cross-Site Scripting (XSS)",
+        "content": "XSS attacks inject malicious scripts into websites, potentially compromising users' data.",
+        "fact_url": "https://www.acunetix.com",
+        "category": "Vulnerabilities",
+        "date_created": "2024-10-16"
+    },
+    {
+        "title": "Botnets",
+        "content": "A botnet is a network of infected computers used to carry out large-scale attacks, often without users' knowledge.",
+        "fact_url": "https://www.symantec.com",
+        "category": "Hacking",
+        "date_created": "2024-10-17"
+    },
+    {
+        "title": "Man-in-the-Middle Attacks",
+        "content": "Man-in-the-middle attacks occur when attackers secretly intercept and alter communication between two parties.",
+        "fact_url": "https://www.checkpoint.com",
+        "category": "Network Security",
+        "date_created": "2024-10-18"
+    },
+    {
+        "title": "Advanced Persistent Threats (APT)",
+        "content": "APTs refer to prolonged, targeted attacks on specific entities, typically for espionage purposes.",
+        "fact_url": "https://www.fireeye.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-10-19"
+    },
+    {
+        "title": "Data Encryption",
+        "content": "Data encryption transforms information into an unreadable format, ensuring unauthorized users cannot access it.",
+        "fact_url": "https://www.kaspersky.com",
+        "category": "Encryption",
+        "date_created": "2024-10-20"
+    },
+    {
+        "title": "Email Spoofing",
+        "content": "Email spoofing is when a sender’s email address is forged to appear as though it comes from a legitimate source.",
+        "fact_url": "https://www.proofpoint.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-10-21"
+    },
+    {
+        "title": "Cybersecurity Hygiene",
+        "content": "Practicing good cybersecurity hygiene includes regular software updates, strong passwords, and secure browsing habits.",
+        "fact_url": "https://www.trendmicro.com",
+        "category": "Best Practices",
+        "date_created": "2024-10-22"
+    },
+    {
+        "title": "Cloud Security",
+        "content": "Securing cloud-based data requires robust encryption, identity management, and monitoring.",
+        "fact_url": "https://www.paloaltonetworks.com",
+        "category": "Cloud Security",
+        "date_created": "2024-10-23"
+    },
+    {
+        "title": "Cybersecurity Skills Gap",
+        "content": "There is a global shortage of skilled cybersecurity professionals, leaving many organizations vulnerable.",
+        "fact_url": "https://www.isc2.org",
+        "category": "Industry Trends",
+        "date_created": "2024-10-24"
+    },
+    {
+        "title": "Incident Response",
+        "content": "A cybersecurity incident response plan helps organizations respond quickly and efficiently to security incidents.",
+        "fact_url": "https://www.ibm.com",
+        "category": "Best Practices",
+        "date_created": "2024-10-25"
+    },
+    {
+        "title": "Zero Trust Security",
+        "content": "Zero trust security models require verification of every user, device, and network before granting access.",
+        "fact_url": "https://www.okta.com",
+        "category": "Security Models",
+        "date_created": "2024-10-26"
+    },
+    {
+        "title": "DNS Spoofing",
+        "content": "DNS spoofing redirects users to malicious websites by altering DNS records.",
+        "fact_url": "https://www.cloudflare.com",
+        "category": "Network Security",
+        "date_created": "2024-10-27"
+    },
+    {
+        "title": "Cyber Espionage",
+        "content": "Cyber espionage refers to the use of computer networks to gain illicit access to confidential information for political or economic gain.",
+        "fact_url": "https://www.sophos.com",
+        "category": "Hacking",
+        "date_created": "2024-10-28"
+    },
+    {
+        "title": "Cybersecurity Regulations",
+        "content": "Regulations like GDPR and HIPAA set standards for data protection and cybersecurity compliance.",
+        "fact_url": "https://gdpr.eu",
+        "category": "Regulations",
+        "date_created": "2024-10-29"
+    },
+    {
+        "title": "Password Managers",
+        "content": "Password managers store and generate strong, unique passwords for each of your accounts.",
+        "fact_url": "https://www.lastpass.com",
+        "category": "Best Practices",
+        "date_created": "2024-10-30"
+    },
+    {
+        "title": "Denial-of-Service Attacks (DoS)",
+        "content": "DoS attacks flood a system with traffic to overwhelm and shut down a website or service.",
+        "fact_url": "https://www.cloudflare.com",
+        "category": "Network Security",
+        "date_created": "2024-10-31"
+    },
+    {
+        "title": "Wi-Fi Protected Access (WPA)",
+        "content": "WPA is a security protocol that encrypts data sent over Wi-Fi networks.",
+        "fact_url": "https://www.linksys.com",
+        "category": "Network Security",
+        "date_created": "2024-11-01"
+    },
+    {
+        "title": "Penetration Testing",
+        "content": "Penetration testing simulates real-world attacks to find vulnerabilities in a system or network.",
+        "fact_url": "https://www.offensive-security.com",
+        "category": "Best Practices",
+        "date_created": "2024-11-02"
+    },
+    {
+        "title": "Threat Intelligence",
+        "content": "Threat intelligence involves gathering and analyzing data about threats to enhance defenses.",
+        "fact_url": "https://www.mandiant.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-03"
+    },
+    {
+        "title": "Network Segmentation",
+        "content": "Network segmentation divides a network into smaller segments to reduce the spread of attacks.",
+        "fact_url": "https://www.cisco.com",
+        "category": "Network Security",
+        "date_created": "2024-11-04"
+    },
+    {
+        "title": "Biometric Authentication",
+        "content": "Biometric authentication uses fingerprints, facial recognition, or other biological traits for identity verification.",
+        "fact_url": "https://www.idemia.com",
+        "category": "Authentication",
+        "date_created": "2024-11-05"
+    },
+    {
+        "title": "Patch Exploits",
+        "content": "Exploiting unpatched vulnerabilities is a common tactic used in cyberattacks.",
+        "fact_url": "https://www.csoonline.com",
+        "category": "Vulnerabilities",
+        "date_created": "2024-11-06"
+    },
+    {
+        "title": "SIEM Systems",
+        "content": "Security Information and Event Management (SIEM) systems analyze log data for potential threats.",
+        "fact_url": "https://www.splunk.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-07"
+    },
+    {
+        "title": "Keylogger Attacks",
+        "content": "Keyloggers record keystrokes to steal sensitive information such as passwords or credit card details.",
+        "fact_url": "https://www.kaspersky.com",
+        "category": "Hacking",
+        "date_created": "2024-11-08"
+    },
+    {
+        "title": "Deep Web vs. Dark Web",
+        "content": "The deep web is the part of the internet not indexed by search engines, while the dark web hosts illegal activities.",
+        "fact_url": "https://www.wired.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-09"
+    },
+    {
+        "title": "Password Hashing",
+        "content": "Hashing passwords adds a layer of security, making them harder to crack if stolen.",
+        "fact_url": "https://www.owasp.org",
+        "category": "Encryption",
+        "date_created": "2024-11-10"
+    },
+    {
+        "title": "Ethical Hacking",
+        "content": "Ethical hackers, or white-hat hackers, help organizations identify vulnerabilities in their systems.",
+        "fact_url": "https://www.eccouncil.org",
+        "category": "Best Practices",
+        "date_created": "2024-11-11"
+    },
+    {
+        "title": "Ransomware-as-a-Service",
+        "content": "Ransomware-as-a-Service (RaaS) offers pre-made ransomware for cybercriminals to rent and deploy.",
+        "fact_url": "https://www.zdnet.com",
+        "category": "Ransomware",
+        "date_created": "2024-11-12"
+    },
+    {
+        "title": "Critical Infrastructure Security",
+        "content": "Securing critical infrastructure like power plants and water systems is a top national security priority.",
+        "fact_url": "https://www.dhs.gov",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-13"
+    },
+    {
+        "title": "USB Drive Security",
+        "content": "Using untrusted USB drives can spread malware, making physical security important.",
+        "fact_url": "https://www.us-cert.cisa.gov",
+        "category": "Malware",
+        "date_created": "2024-11-14"
+    },
+    {
+        "title": "Cybersecurity Insurance",
+        "content": "Cybersecurity insurance helps organizations recover from the financial impact of a cyberattack.",
+        "fact_url": "https://www.chubb.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-15"
+    },
+    {
+        "title": "Mobile Security Threats",
+        "content": "Mobile devices are increasingly targeted by malware and phishing attacks.",
+        "fact_url": "https://www.mcafee.com",
+        "category": "Mobile Security",
+        "date_created": "2024-11-16"
+    },
+    {
+        "title": "Artificial Intelligence in Security",
+        "content": "AI is used to enhance cybersecurity by detecting patterns and automating threat responses.",
+        "fact_url": "https://www.darkreading.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-17"
+    },
+    {
+        "title": "APT Groups",
+        "content": "Advanced Persistent Threat (APT) groups are often state-sponsored and conduct long-term cyber espionage campaigns.",
+        "fact_url": "https://www.kaspersky.com",
+        "category": "Hacking",
+        "date_created": "2024-11-18"
+    },
+    {
+        "title": "Multi-Factor Authentication (MFA)",
+        "content": "MFA requires multiple forms of verification, making it harder for attackers to access accounts.",
+        "fact_url": "https://www.microsoft.com",
+        "category": "Authentication",
+        "date_created": "2024-11-19"
+    },
+    {
+        "title": "Credential Stuffing",
+        "content": "Credential stuffing attacks use stolen usernames and passwords to gain unauthorized access to accounts.",
+        "fact_url": "https://www.imperva.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-20"
+    },
+    {
+        "title": "GDPR Data Breaches",
+        "content": "Under GDPR, companies are required to report data breaches within 72 hours.",
+        "fact_url": "https://gdpr.eu",
+        "category": "Regulations",
+        "date_created": "2024-11-21"
+    },
+    {
+        "title": "Blockchain Security",
+        "content": "Blockchain technology offers enhanced security through decentralized, immutable records.",
+        "fact_url": "https://www.coindesk.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-22"
+    },
+    {
+        "title": "DDoS Protection Services",
+        "content": "Cloud-based DDoS protection services help mitigate the impact of distributed denial-of-service attacks.",
+        "fact_url": "https://www.incapsula.com",
+        "category": "Network Security",
+        "date_created": "2024-11-23"
+    },
+    {
+        "title": "Bug Bounty Programs",
+        "content": "Bug bounty programs reward ethical hackers for finding and reporting security vulnerabilities.",
+        "fact_url": "https://www.hackerone.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-24"
+    },
+    {
+        "title": "Cryptojacking",
+        "content": "Cryptojacking involves unauthorized use of a computer's resources to mine cryptocurrency.",
+        "fact_url": "https://www.symantec.com",
+        "category": "Hacking",
+        "date_created": "2024-11-25"
+    },
+    {
+        "title": "Cybersecurity Awareness Training",
+        "content": "Employee cybersecurity awareness training is crucial to defend against phishing and social engineering.",
+        "fact_url": "https://www.proofpoint.com",
+        "category": "Best Practices",
+        "date_created": "2024-11-26"
+    },
+    {
+        "title": "Endpoint Security",
+        "content": "Endpoint security focuses on securing individual devices like laptops, phones, and servers from cyber threats.",
+        "fact_url": "https://www.trendmicro.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-27"
+    },
+    {
+        "title": "Network Firewalls",
+        "content": "Network firewalls block unauthorized access to or from private networks.",
+        "fact_url": "https://www.cisco.com",
+        "category": "Firewalls",
+        "date_created": "2024-11-28"
+    },
+    {
+        "title": "Data Exfiltration",
+        "content": "Data exfiltration is the unauthorized transfer of data from a computer or network.",
+        "fact_url": "https://www.checkpoint.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-29"
+    },
+    {
+        "title": "Social Media Risks",
+        "content": "Sharing too much personal information on social media can expose users to phishing and fraud attacks.",
+        "fact_url": "https://www.norton.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-11-30"
+    },
+    {
+        "title": "Anti-Virus Software",
+        "content": "Anti-virus software detects and removes malware from a computer system.",
+        "fact_url": "https://www.mcafee.com",
+        "category": "Malware",
+        "date_created": "2024-12-01"
+    },
+    {
+        "title": "Third-Party Risk Management",
+        "content": "Third-party risk management involves securing data shared with external vendors and partners.",
+        "fact_url": "https://www.forbes.com",
+        "category": "Cybersecurity",
+        "date_created": "2024-12-02"
+    },
+    {
+        "title": "Distributed Denial-of-Service (DDoS)",
+        "content": "DDoS attacks flood a network or service with traffic, making it unavailable to users.",
+        "fact_url": "https://www.cloudflare.com",
+        "category": "Network Security",
+        "date_created": "2024-12-03"
+    },
+    {
+        "title": "Zero-Day Exploits",
+        "content": "Zero-day exploits take advantage of security vulnerabilities before they are patched by vendors.",
+        "fact_url": "https://www.csoonline.com",
+        "category": "Vulnerabilities",
+        "date_created": "2024-12-04"
+    }
+]

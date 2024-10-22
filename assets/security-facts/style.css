@@ -1,0 +1,62 @@
+.security-facts-carousel {
+    background: red !important;
+    padding: 4rem 0;
+}
+
+.security-facts-carousel .item {
+    background: #f9f9f9;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.security-facts-carousel .item h3 {
+    font-size: 18px;
+    color: #0073aa;
+    margin-bottom: 10px;
+}
+
+.security-facts-carousel .item p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.security-facts-carousel .item .category {
+    display: inline-block;
+    background-color: #0073aa;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.security-facts-carousel .item .fact-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #0073aa;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.security-facts-carousel .item .fact-link:hover {
+    text-decoration: underline;
+}
+
+/* Owl Carousel navigation buttons */
+.owl-nav button.owl-prev,
+.owl-nav button.owl-next {
+    background-color: #0073aa;
+    color: white;
+    border-radius: 50%;
+    padding: 10px;
+    border: none;
+}
+
+.owl-nav button.owl-prev:hover,
+.owl-nav button.owl-next:hover {
+    background-color: #005c88;
+}
