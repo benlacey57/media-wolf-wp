@@ -8,20 +8,21 @@ class WooCommerce_Customizations {
         add_action('admin_init', [self::class, 'register_settings']);
         
         // Add WooCommerce customization hooks
-        self::customize_checkout_fields();
-        self::customize_order_fields();
+        self::customise_checkout_fields();
+        self::custom_order_fields();
         self::customize_email_templates();
         self::customize_product_pages();
         self::customize_cart_and_checkout();
         self::customize_account_pages();
         self::customize_discounts_and_rules();
+        self::product_tabs();
     }
 
     /**
      * Add WooCommerce settings page under Media Wolf.
      */
     public static function add_settings_page(): void {
-        add_submenu_page('media-wolf', 'WooCommerce Customizations', 'WooCommerce Customizations', 'manage_options', 'media-wolf-woocommerce', [self::class, 'render_woocommerce_settings']);
+        add_submenu_page('media-wolf', 'WooCommerce', 'WooCommerce Customisations', 'manage_options', 'media-wolf-woocommerce', [self::class, 'render_woocommerce_settings']);
     }
 
     /**
@@ -33,9 +34,6 @@ class WooCommerce_Customizations {
 
         // Register custom discount percentage setting
         register_setting('media-wolf-woocommerce-settings', 'media_wolf_discount_percentage', ['default' => 10]);
-
-        // Register custom tab toggle setting
-        register_setting('media-wolf-woocommerce-settings', 'media_wolf_enable_custom_tab', ['default' => 1]);
     }
 
     /**
@@ -51,7 +49,7 @@ class WooCommerce_Customizations {
                 do_settings_sections('media-wolf-woocommerce-settings');
 
                 // Custom Checkout Field Label
-                echo '<h3>Checkout Customizations</h3>';
+                echo '<h3>Checkout</h3>';
                 echo '<label for="media_wolf_custom_checkout_label">Checkout Field Label:</label>';
                 echo '<input type="text" name="media_wolf_custom_checkout_label" value="' . esc_attr(get_option('media_wolf_custom_checkout_label')) . '">';
 
@@ -60,11 +58,6 @@ class WooCommerce_Customizations {
                 echo '<label for="media_wolf_discount_percentage">Discount Percentage:</label>';
                 echo '<input type="number" name="media_wolf_discount_percentage" value="' . esc_attr(get_option('media_wolf_discount_percentage')) . '" min="0" max="100">';
 
-                // Enable Custom Product Tab
-                echo '<h3>Product Page Customizations</h3>';
-                echo '<label for="media_wolf_enable_custom_tab">Enable Custom Tab:</label>';
-                echo '<input type="checkbox" name="media_wolf_enable_custom_tab" value="1"' . checked(1, get_option('media_wolf_enable_custom_tab'), false) . '>';
-                
                 submit_button();
                 ?>
             </form>
@@ -72,12 +65,36 @@ class WooCommerce_Customizations {
         <?php
     }
 
-    // WooCommerce Customizations
+    /**
+     * Add a custom tabs to WooCommerce product pages.
+     */
+    public static function product_tabs(): void {
+        add_filter('woocommerce_product_tabs', function($tabs) {
+            $tabs['custom_tab'] = array(
+                'title'    => __('Custom Tab', 'woocommerce'),
+                'priority' => 50,
+                'callback' => function() {
+                    echo '<h2>' . __('Custom Tab 1', 'woocommerce') . '</h2>';
+                    echo '<p>Here is some additional information about this product.</p>';
+                }
+            );
+
+            $tabs['custom_tab'] = array(
+                'title'    => __('Custom Tab 2', 'woocommerce'),
+                'priority' => 50,
+                'callback' => function() {
+                    echo '<h2>' . __('Custom Tab 2', 'woocommerce') . '</h2>';
+                    echo '<p>Here is some additional information about this product.</p>';
+                }
+            );
+            return $tabs;
+        });
+    }
 
     /**
      * Customize checkout fields.
      */
-    public static function customize_checkout_fields(): void {
+    public static function customise_checkout_fields(): void {
         add_filter('woocommerce_checkout_fields', function($fields) {
             $label = get_option('media_wolf_custom_checkout_label', 'Custom Field');
             $fields['billing']['billing_custom_field'] = array(
@@ -92,9 +109,9 @@ class WooCommerce_Customizations {
     }
 
     /**
-     * Customize order fields in the WooCommerce admin area.
+     * Custom order fields in the WooCommerce admin area.
      */
-    public static function customize_order_fields(): void {
+    public static function custom_order_fields(): void {
         add_action('woocommerce_admin_order_data_after_billing_address', function($order) {
             echo '<p><strong>' . __('Custom Field') . ':</strong> ' . get_post_meta($order->get_id(), '_custom_field', true) . '</p>';
         });
