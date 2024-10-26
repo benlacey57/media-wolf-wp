@@ -8,14 +8,13 @@ class WooCommerce_Customizations {
         add_action('admin_init', [self::class, 'register_settings']);
         
         // Add WooCommerce customization hooks
+        self::product_tabs();
         self::customise_checkout_fields();
         self::custom_order_fields();
-        self::customize_email_templates();
-        self::customize_product_pages();
-        self::customize_cart_and_checkout();
-        self::customize_account_pages();
-        self::customize_discounts_and_rules();
-        self::product_tabs();
+        // self::customize_email_templates();
+        // self::customize_cart_and_checkout();
+        // self::customize_account_pages();
+        // self::customize_discounts_and_rules();        
     }
 
     /**
@@ -70,18 +69,18 @@ class WooCommerce_Customizations {
      */
     public static function product_tabs(): void {
         add_filter('woocommerce_product_tabs', function($tabs) {
-            $tabs['custom_tab'] = array(
+            $tabs['custom_tab_1'] = array(
                 'title'    => __('Custom Tab', 'woocommerce'),
-                'priority' => 50,
+                'priority' => 30,
                 'callback' => function() {
                     echo '<h2>' . __('Custom Tab 1', 'woocommerce') . '</h2>';
                     echo '<p>Here is some additional information about this product.</p>';
                 }
             );
 
-            $tabs['custom_tab'] = array(
+            $tabs['custom_tab_2'] = array(
                 'title'    => __('Custom Tab 2', 'woocommerce'),
-                'priority' => 50,
+                'priority' => 40,
                 'callback' => function() {
                     echo '<h2>' . __('Custom Tab 2', 'woocommerce') . '</h2>';
                     echo '<p>Here is some additional information about this product.</p>';
@@ -124,27 +123,6 @@ class WooCommerce_Customizations {
         add_filter('woocommerce_email_order_meta', function($order, $sent_to_admin, $plain_text) {
             echo '<p><strong>' . __('Custom Message') . ':</strong> Thank you for shopping with us!</p>';
         }, 10, 3);
-    }
-
-    /**
-     * Customize the front-end shop and product pages.
-     */
-    public static function customize_product_pages(): void {
-        $enable_custom_tab = get_option('media_wolf_enable_custom_tab', 1);
-        
-        if ($enable_custom_tab) {
-            add_filter('woocommerce_product_tabs', function($tabs) {
-                $tabs['custom_tab'] = array(
-                    'title'    => __('Custom Tab', 'woocommerce'),
-                    'priority' => 50,
-                    'callback' => function() {
-                        echo '<h2>' . __('Custom Product Information', 'woocommerce') . '</h2>';
-                        echo '<p>Here is some additional information about this product.</p>';
-                    }
-                );
-                return $tabs;
-            });
-        }
     }
 
     /**

@@ -8,24 +8,11 @@ class Security_Facts {
         add_action('init', [self::class, 'register_post_type']);
 
         // Render Security Facts
-        add_action('wp_footer', [self::class, 'display_random_facts_carousel']);
+        // add_action('wp_footer', [self::class, 'display_security_facts_carousel']);
         
-        // Shortcode to display the random facts carousel
-        add_shortcode('security_facts_carousel', function() {
-            return Security_Facts_Plugin::display_random_facts_carousel();
-        });
-        
-        // Shortcode to display random security facts
-        add_shortcode('security_facts_list', function(){
-            // Set default value for count to 1 if not provided
-            $atts = shortcode_atts(
-                array(
-                    'count' => 1, // Default to 1 fact
-                ), 
-                $atts
-            );
-            echo Security_Facts_Plugin::display_random_facts_list($atts['count']); 
-        });
+        // Security Shortcodes
+        add_shortcode('security_facts_carousel', [self::class, 'display_security_facts_carousel']);
+        add_shortcode('security_facts_list', [self::class, 'display_security_facts_list']);
         
         // Front-End Assets
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_assets']);
@@ -47,7 +34,7 @@ class Security_Facts {
         ]);
     }
 
-    public static function display_random_facts_list($count = 1) {
+    public static function display_security_facts_list($count = 1) {
         // Fetch the security facts based on the passed count
         $facts = get_posts([
             'post_type' => 'security_facts',
@@ -80,11 +67,11 @@ class Security_Facts {
         }
         $output .= '</div>';
     
-        return $output;
+        echo $output;
     }
 
 
-    public static function display_random_facts_carousel() {
+    public static function display_security_facts_carousel() {
         $facts = get_posts([
             'post_type' => 'security_facts',
             'posts_per_page' => get_option('media_wolf_facts_carousel_count') ? get_option('media_wolf_facts_carousel_count') : 5,
@@ -116,7 +103,7 @@ class Security_Facts {
         endif;
         $output .= '</div>';
     
-        return $output;
+        echo $output;
     }
 
 
@@ -130,7 +117,7 @@ class Security_Facts {
         // Enqueue custom CSS and JS from plugin assets folder
         wp_enqueue_style('security-facts-carousel-css', MEDIA_WOLF_PLUGIN_PATH . 'assets/security-facts/style.css');
         wp_enqueue_script('security-facts-carousel-js', MEDIA_WOLF_PLUGIN_PATH . 'assets/security-facts/script.js', array('jquery', 'owl-carousel-js'), null, true);
-    }
+    }    
 
     /**
      * Add the main settings page.
