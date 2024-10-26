@@ -98,8 +98,6 @@ class Security_Facts {
                     }
                 $output .= '</div>';
             endforeach;
-        else:
-            $output = 'No Security Facts To Display';
         endif;
         $output .= '</div>';
     
