@@ -1,12 +1,21 @@
 <?php
 namespace MediaWolf;
 
-class WooCommerce_Customizations {
+use MediaWolf\PluginComponentInterface;
+
+class WooCommerce_Customisations implements PluginComponentInterface {
 
     public static function init(): void {
-        add_action('admin_menu', [self::class, 'add_settings_page']);
+        // Admin
+        // add_action('init', [self::class, 'register_post_type']);  
         add_action('admin_init', [self::class, 'register_settings']);
+        add_action('admin_menu', [self::class, 'dashboard_menu_link']);
+
+        // Assets
+        // add_action('wp_enqueue_scripts', [self::class, 'enqueue_assets']);
+        // add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_assets']);
         
+
         // Add WooCommerce customization hooks
         self::product_tabs();
         self::customise_checkout_fields();
@@ -20,14 +29,15 @@ class WooCommerce_Customizations {
     /**
      * Add WooCommerce settings page under Media Wolf.
      */
-    public static function add_settings_page(): void {
-        add_submenu_page('media-wolf', 'WooCommerce', 'WooCommerce Customisations', 'manage_options', 'media-wolf-woocommerce', [self::class, 'render_woocommerce_settings']);
+    public static function dashboard_menu_link(): void
+    {
+        add_submenu_page('media-wolf', 'WooCommerce', 'WooCommerce Customisations', 'manage_options', 'media-wolf-woocommerce', [self::class, 'render_settings_page']);
     }
 
     /**
      * Register WooCommerce settings fields.
      */
-    public static function register_settings(): void {
+    public static function register_page_settings(): void {
         // Register custom checkout field label
         register_setting('media-wolf-woocommerce-settings', 'media_wolf_custom_checkout_label', ['default' => 'Custom Field']);
 
@@ -39,29 +49,7 @@ class WooCommerce_Customizations {
      * Render the WooCommerce customizations settings page.
      */
     public static function render_woocommerce_settings(): void {
-        ?>
-        <div class="wrap">
-            <h1>WooCommerce Customizations</h1>
-            <form method="post" action="options.php">
-                <?php
-                settings_fields('media-wolf-woocommerce-settings');
-                do_settings_sections('media-wolf-woocommerce-settings');
-
-                // Custom Checkout Field Label
-                echo '<h3>Checkout</h3>';
-                echo '<label for="media_wolf_custom_checkout_label">Checkout Field Label:</label>';
-                echo '<input type="text" name="media_wolf_custom_checkout_label" value="' . esc_attr(get_option('media_wolf_custom_checkout_label')) . '">';
-
-                // Discount Percentage
-                echo '<h3>Discount Settings</h3>';
-                echo '<label for="media_wolf_discount_percentage">Discount Percentage:</label>';
-                echo '<input type="number" name="media_wolf_discount_percentage" value="' . esc_attr(get_option('media_wolf_discount_percentage')) . '" min="0" max="100">';
-
-                submit_button();
-                ?>
-            </form>
-        </div>
-        <?php
+        echo get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-woocommerce-page');
     }
 
     /**
@@ -73,8 +61,7 @@ class WooCommerce_Customizations {
                 'title'    => __('Custom Tab', 'woocommerce'),
                 'priority' => 30,
                 'callback' => function() {
-                    echo '<h2>' . __('Custom Tab 1', 'woocommerce') . '</h2>';
-                    echo '<p>Here is some additional information about this product.</p>';
+                    return get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/woocommerce/tabs/custom-tab-1');
                 }
             );
 
@@ -82,8 +69,7 @@ class WooCommerce_Customizations {
                 'title'    => __('Custom Tab 2', 'woocommerce'),
                 'priority' => 40,
                 'callback' => function() {
-                    echo '<h2>' . __('Custom Tab 2', 'woocommerce') . '</h2>';
-                    echo '<p>Here is some additional information about this product.</p>';
+                    return get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/woocommerce/tabs/custom-tab-2');
                 }
             );
             return $tabs;
@@ -154,18 +140,21 @@ class WooCommerce_Customizations {
     }
 
     /**
-     * Apply product-specific discounts or rules.
+     * Automatically apply voucher codes to the cart via URL parameter.
+     * 
+     * Example: https://example.com/cart/?apply_coupon=SUMMER10
      */
-    public static function customize_discounts_and_rules(): void {
-        add_action('woocommerce_before_calculate_totals', function($cart) {
-            $discount_percentage = get_option('media_wolf_discount_percentage', 10);
-            
-            foreach ($cart->get_cart() as $cart_item) {
-                if ($cart_item['quantity'] >= 2) {
-                    $discounted_price = $cart_item['data']->get_price() * ((100 - $discount_percentage) / 100);
-                    $cart_item['data']->set_price($discounted_price); // Apply discount
-                }
-            }
+    public static function apply_voucher_via_url_parameter(): void {
+        add_action('init', function() {
+            $coupon_code_parameter = sanitize_text_field($_GET['apply_coupon']);
+
+            // Check we have the coupon parameter in the request and check it's not already applied.
+            // @TODO: Add a nonce check here to prevent CSRF attacks.
+            // @TODO: Add a check to ensure the coupon is valid.
+            if (
+                isset($coupon_code_parameter) && 
+                !WC()->cart->has_discount(sanitize_text_field($_GET['apply_coupon']))):
+                WC()->cart->apply_coupon(sanitize_text_field($_GET['apply_coupon']));
+            endif;
         });
-    }
 }

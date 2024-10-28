@@ -2,24 +2,22 @@
 
 namespace MediaWolf;
 
-class Security_Facts {
+use MediaWolf\PluginComponentInterface;
+class Security_Facts implements PluginComponentInterface {
 
     public static function init(): void {
-        add_action('init', [self::class, 'register_post_type']);
+        // Admin
+        add_action('init', [self::class, 'register_post_type']);  
+        add_action('admin_init', [self::class, 'register_settings']);
+        add_action('admin_menu', [self::class, 'dashboard_menu_link']);
 
-        // Render Security Facts
-        // add_action('wp_footer', [self::class, 'display_security_facts_carousel']);
+        // Assets
+        // add_action('wp_enqueue_scripts', [self::class, 'enqueue_assets']);
+        // add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_assets']);
         
         // Security Shortcodes
         add_shortcode('security_facts_carousel', [self::class, 'display_security_facts_carousel']);
-        add_shortcode('security_facts_list', [self::class, 'display_security_facts_list']);
-        
-        // Front-End Assets
-        add_action('wp_enqueue_scripts', [self::class, 'enqueue_assets']);
-        
-        // WordPress Dashboard
-        add_action('admin_menu', [self::class, 'add_settings_page']);
-        add_action('admin_init', [self::class, 'register_settings']);
+        add_shortcode('security_facts_list', [self::class, 'display_security_facts_list']);        
     }
 
     public static function register_post_type(): void {
@@ -30,113 +28,21 @@ class Security_Facts {
             ],
             'public' => false,
             'show_ui' => true,
+            'show_in_rest' => true,
+            'can_export' => true,
             'supports' => ['title', 'editor', 'custom-fields'],
         ]);
     }
 
-    public static function display_security_facts_list($count = 1) {
-        // Fetch the security facts based on the passed count
-        $facts = get_posts([
-            'post_type' => 'security_facts',
-            'posts_per_page' => intval($count),
-            'orderby' => 'rand'
-        ]);
-    
-        $output = '<div class="security-facts-list">';
-        if (!empty($facts)) {
-            foreach ($facts as $fact) {
-                $fact_url = get_post_meta($fact->ID, 'fact_url', true);
-                $category = get_post_meta($fact->ID, 'category', true);
-                $content = $fact->post_content;
-                $title = $fact->post_title;
-    
-                // Output each fact as a list item
-                $output .= '<div class="security-fact">';
-                $output .= '<h3>' . esc_html($title) . '</h3>';
-                $output .= '<p>' . esc_html($content) . '</p>';
-                if (!empty($category)) {
-                    $output .= '<span class="category">' . esc_html($category) . '</span>';
-                }
-                if (!empty($fact_url)) {
-                    $output .= '<a href="' . esc_url($fact_url) . '" target="_blank" class="fact-link">Learn More</a>';
-                }
-                $output .= '</div>';
-            }
-        } else {
-            $output = 'No Security Facts To Display';
-        }
-        $output .= '</div>';
-    
-        echo $output;
-    }
-
-
-    public static function display_security_facts_carousel() {
-        $facts = get_posts([
-            'post_type' => 'security_facts',
-            'posts_per_page' => get_option('media_wolf_facts_carousel_count') ? get_option('media_wolf_facts_carousel_count') : 5,
-            'orderby' => 'rand'
-        ]);
-    
-        $output = '<div class="owl-carousel security-facts-carousel">';
-        if (!empty($facts)):
-            foreach ($facts as $fact):
-                $fact_url = get_post_meta($fact->ID, 'fact_url', true);
-                $category = get_post_meta($fact->ID, 'category', true);
-                $content = $fact->post_content;
-                $title = $fact->post_title;
-    
-                // Output each fact as a carousel item
-                $output .= '<div class="item">';
-                    $output .= '<h3>' . esc_html($title) . '</h3>';
-                    $output .= '<p>' . esc_html($content) . '</p>';
-                    if (!empty($category)) {
-                        $output .= '<span class="category">' . esc_html($category) . '</span>';
-                    }
-                    if (!empty($fact_url)) {
-                        $output .= '<a href="' . esc_url($fact_url) . '" target="_blank" class="fact-link">Learn More</a>';
-                    }
-                $output .= '</div>';
-            endforeach;
-        endif;
-        $output .= '</div>';
-    
-        echo $output;
-    }
-
-
-    // Enqueue JS and CSS assets for the carousel
-    public static function enqueue_assets(): void {
-        // Enqueue Owl Carousel CSS and JS from CDN
-        wp_enqueue_style('owl-carousel-css', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css');
-        wp_enqueue_style('owl-carousel-theme-css', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css');
-        wp_enqueue_script('owl-carousel-js', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js', array('jquery'), null, true);
-        
-        // Enqueue custom CSS and JS from plugin assets folder
-        wp_enqueue_style('security-facts-carousel-css', MEDIA_WOLF_PLUGIN_PATH . 'assets/security-facts/style.css');
-        wp_enqueue_script('security-facts-carousel-js', MEDIA_WOLF_PLUGIN_PATH . 'assets/security-facts/script.js', array('jquery', 'owl-carousel-js'), null, true);
-    }    
-
     /**
-     * Add the main settings page.
+     * Add the Security Facts settings page under Media Wolf in the dashboard
      */
-    public static function add_settings_page(): void {
+    public static function dashboard_menu_link(): void {
         add_submenu_page('media-wolf', 'Security Facts Settings', 'Security Facts', 'manage_options', 'media-wolf-security-facts', [self::class, 'render_security_facts_page']);
     }
 
-    public static function render_security_facts_page(): void {
-        ?>
-        <div class="wrap">
-            <h1>Security Facts Settings</h1>
-            <form method="post" action="options.php">
-                <?php
-                    settings_fields('media-wolf-settings');
-                    do_settings_sections('media-wolf-security-facts');
-                    submit_button();
-                ?>
-            </form>
-        </div>
-        <?php
+    public static function render_settings_page(): void {
+        echo get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-security-facts-page');
     }
 
     /**
@@ -157,6 +63,46 @@ class Security_Facts {
         if (get_option('media_wolf_facts_import_sample_data') === 'yes') {
             self::import_security_facts();
             update_option('media_wolf_facts_import_sample_data', 'no'); // Reset after import
+        }
+    }
+
+    // Enqueue JS and CSS assets for the carousel
+    public static function enqueue_assets(): void {
+        // Enqueue Owl Carousel CSS and JS from CDN
+        wp_enqueue_style('owl-carousel-css', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css');
+        wp_enqueue_style('owl-carousel-theme-css', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css');
+        wp_enqueue_script('owl-carousel-js', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js', array('jquery'), null, true);
+        
+        // Enqueue custom CSS and JS from plugin assets folder
+        wp_enqueue_style('security-facts-carousel-css', MEDIA_WOLF_PLUGIN_PATH . 'assets/security-facts/style.css');
+        wp_enqueue_script('security-facts-carousel-js', MEDIA_WOLF_PLUGIN_PATH . 'assets/security-facts/script.js', array('jquery', 'owl-carousel-js'), null, true);
+    }   
+
+    public static function display_security_facts_list($count = 1) {
+        $facts = get_posts([
+            'post_type' => 'security_facts',
+            'posts_per_page' => intval($count),
+            'orderby' => 'rand'
+        ]);
+    
+        if (!empty($facts)) {
+            include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/security-facts/security-facts-list.php';
+        } else {
+            echo 'No Security Facts To Display';
+        }
+    }
+    
+    public static function display_security_facts_carousel() {
+        $facts = get_posts([
+            'post_type' => 'security_facts',
+            'posts_per_page' => get_option('media_wolf_facts_carousel_count') ? get_option('media_wolf_facts_carousel_count') : 5,
+            'orderby' => 'rand'
+        ]);
+    
+        if (!empty($facts)) {
+            include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/security-facts/security-facts-carousel.php';
+        } else {
+            echo 'No Security Facts To Display';
         }
     }
 

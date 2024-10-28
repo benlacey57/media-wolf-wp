@@ -1,0 +1,1 @@
+<p>This content is restricted. Please <a href="<?php echo esc_url($login_url); ?>">login</a> or <a href="<?php echo esc_url($register_url); ?>">register</a> to view the full content.</p>

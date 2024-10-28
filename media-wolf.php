@@ -33,6 +33,6 @@ function media_wolf_init() {
     MediaWolf\Settings::init();
     MediaWolf\Content_Restriction::init();
     MediaWolf\Security_Facts::init();
-    // MediaWolf\WooCommerce_Customizations::init();
+    // MediaWolf\WooCommerce_Customisations::init();
 }
 add_action('plugins_loaded', 'media_wolf_init');
