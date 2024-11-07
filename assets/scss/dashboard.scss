@@ -1,0 +1,28 @@
+// dashboard.scss
+
+@import 'variables';
+
+.media-wolf-dashboard {
+    .dashboard-sections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+
+        .dashboard-section {
+            padding: 20px;
+            background: $accent;
+            border: 1px solid #e0e0e0;
+            border-radius: $border-radius;
+
+            &:nth-child(odd) {
+                background: lighten($accent, 10%);
+            }
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: $primary;
+        }
+    }
+}

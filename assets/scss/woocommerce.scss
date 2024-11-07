@@ -1,0 +1,21 @@
+// woocommerce.scss
+
+@import 'variables';
+
+.woocommerce {
+    font-family: $font-family;
+    color: $text-color;
+
+    .product-tabs {
+        background-color: $accent;
+        padding: $padding-medium;
+        border-radius: $border-radius;
+    }
+
+    .checkout-custom-field {
+        background-color: $accent;
+        padding: $padding-small;
+        border: 1px solid #ccc;
+        border-radius: $border-radius;
+    }
+}

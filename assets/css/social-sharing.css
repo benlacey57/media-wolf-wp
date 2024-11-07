@@ -1,0 +1,16 @@
+.social-buttons {
+  display: flex;
+  gap: 8px;
+}
+.social-buttons .social-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: hsl(37.4, 67.6%, 57.6%);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+.social-buttons .social-button:hover {
+  background-color: hsl(37.4, 67.6%, 47.6%);
+}

@@ -1,0 +1,14 @@
+/* Owl Carousel navigation buttons */
+.owl-nav button.owl-prev,
+.owl-nav button.owl-next {
+  background-color: #0073aa;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  border: none;
+}
+
+.owl-nav button.owl-prev:hover,
+.owl-nav button.owl-next:hover {
+  background-color: #005c88;
+}

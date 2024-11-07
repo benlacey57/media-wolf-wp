@@ -1,0 +1,28 @@
+// _variables.scss
+
+// Colors
+$primary: hsl(37.4, 67.6%, 57.6%);
+$secondary: hsl(0, 0%, 25.1%);
+$accent: hsl(45.7, 67.7%, 93.9%);
+$error: hsl(0, 75.2%, 51%);
+$info: hsl(220, 94.3%, 72.5%);
+$warning: hsl(47.4, 95.8%, 53.1%);
+$success: hsl(161, 92.1%, 24.9%);
+
+// Fonts
+$font-family: 'Roboto', sans-serif;
+$text-color: hsl(0, 0%, 25.1%);
+$font-size-base: 16px;
+
+// Spacing
+$padding-small: 8px;
+$padding-medium: 16px;
+$padding-large: 24px;
+$padding-extra-large: 32px;
+
+// Border Radius
+$border-radius: 4px;
+$border-radius-large: 10px;
+
+// Shadows
+$box-shadow-small: 0 2px 5px rgba(0, 0, 0, 0.1);

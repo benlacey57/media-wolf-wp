@@ -1,0 +1,18 @@
+// content-restriction.scss
+
+@import 'variables';
+
+.restricted-content-notice {
+    background-color: lighten($secondary, 40%);
+    padding: $padding-medium;
+    color: $text-color;
+    border-left: 4px solid $secondary;
+    font-family: $font-family;
+}
+
+.restricted-content-form {
+    background: #fff;
+    padding: $padding-medium;
+    border-radius: $border-radius;
+    border: 1px solid #e5e5e5;
+}

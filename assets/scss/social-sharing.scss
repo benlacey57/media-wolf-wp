@@ -1,0 +1,22 @@
+// social-sharing.scss
+
+@import 'variables';
+
+.social-buttons {
+    display: flex;
+    gap: $padding-small;
+
+    .social-button {
+        display: inline-block;
+        padding: $padding-small $padding-medium;
+        background-color: $primary;
+        color: #fff;
+        text-decoration: none;
+        border-radius: $border-radius;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: darken($primary, 10%);
+        }
+    }
+}

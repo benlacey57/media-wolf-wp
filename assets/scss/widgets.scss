@@ -1,0 +1,17 @@
+// widgets.scss
+
+@import 'variables';
+
+.widget {
+    padding: $padding-medium;
+    margin: $padding-small;
+    background: $accent;
+    border: 1px solid $secondary;
+    border-radius: $border-radius;
+    
+    h3 {
+        font-size: 1.2em;
+        color: $primary;
+        margin-bottom: $padding-small;
+    }
+}

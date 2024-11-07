@@ -1,0 +1,65 @@
+// security-facts.scss
+
+@import 'variables';
+
+.security-facts-carousel {
+    background: red !important;
+    padding: 4rem 0;
+
+    .item {
+        background: #f9f9f9;
+        padding: 20px;
+        margin: 10px;
+        border-radius: $border-radius-large;
+        box-shadow: $box-shadow-small;
+        text-align: center;
+
+        h3 {
+            font-size: 18px;
+            color: $info;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            color: $secondary;
+            margin-bottom: 10px;
+        }
+
+        .category {
+            display: inline-block;
+            background-color: $info;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .fact-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: $info;
+            text-decoration: none;
+            font-weight: bold;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+// Owl Carousel navigation buttons
+.owl-nav button.owl-prev,
+.owl-nav button.owl-next {
+    background-color: $info;
+    color: white;
+    border-radius: 50%;
+    padding: 10px;
+    border: none;
+
+    &:hover {
+        background-color: darken($info, 10%);
+    }
+}
