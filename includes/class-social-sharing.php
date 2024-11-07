@@ -99,16 +99,15 @@ class Social_Sharing implements PluginComponentInterface
   /**
    * Enqueue CSS for social sharing buttons.
    */
-  public static function enqueue_assets(): void {
+  public static function enqueue_assets(): void
+  {
     $is_dev = strpos(home_url(), 'localhost') !== false || strpos(home_url(), 'staging') !== false;
     $file_suffix = $is_dev ? '' : '.min';
 
     wp_enqueue_style('media-wolf-social-sharing', MEDIA_WOLF_PLUGIN_PATH . "/assets/css/social-sharing$file_suffix.css");
-  }  
+  }
 
-  /**
-   * Display social sharing buttons based on settings.
-   */
+  // Include the sharing buttons partial
   public static function display_sharing_buttons($content)
   {
     // Get settings
@@ -122,22 +121,9 @@ class Social_Sharing implements PluginComponentInterface
     }
 
     // Include the sharing buttons partial
-    public static function display_sharing_buttons($content)
-    {
-      // Get settings
-      $enabled_post_types = get_option('media_wolf_social_post_types', []);
-      $display_location = get_option('media_wolf_social_display_location', 'bottom');
-      $platforms = get_option('media_wolf_social_platforms', []);
-
-      // Check if sharing is enabled for this post type
-      if (!in_array(get_post_type(), $enabled_post_types)) {
-        return $content;
-      }
-
-      // Include the sharing buttons partial
-      ob_start();
-      include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/social-sharing/buttons.php';
-      $buttons = ob_get_clean();
+    ob_start();
+    include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/social-sharing/buttons.php';
+    $buttons = ob_get_clean();
 
 
     // Add buttons based on display location
@@ -147,9 +133,9 @@ class Social_Sharing implements PluginComponentInterface
       return $content . $buttons;
     } elseif ($display_location === 'fixed_left' || $display_location === 'fixed_right') {
       $buttons = '<div class="media-wolf-social-fixed ' . esc_attr($display_location) . '">';
-        $buttons .= $buttons;
+      $buttons .= $buttons;
       $buttons .= '</div>';
-      
+
       add_action('wp_footer', function () use ($buttons) {
         echo $buttons;
       });
