@@ -8,7 +8,7 @@ class Security_Facts implements PluginComponentInterface {
     public static function init(): void {
         // Admin
         add_action('init', [self::class, 'register_post_type']);  
-        add_action('admin_init', [self::class, 'register_settings']);
+        add_action('admin_init', [self::class, 'register_page_settings']);
         add_action('admin_menu', [self::class, 'dashboard_menu_link']);
 
         // Assets
@@ -38,21 +38,33 @@ class Security_Facts implements PluginComponentInterface {
      * Add the Security Facts settings page under Media Wolf in the dashboard
      */
     public static function dashboard_menu_link(): void {
-        add_submenu_page('media-wolf', 'Security Facts Settings', 'Security Facts', 'manage_options', 'media-wolf-security-facts', [self::class, 'render_security_facts_page']);
+        add_submenu_page(
+            'media-wolf', 
+            __('Security Facts', 'media-wolf'), 
+            __('Security Facts Settings', 'media-wolf'), 
+            'manage_options', 
+            'media-wolf-security-facts', 
+            [self::class, 'render_settings_page']
+        );
     }
 
     public static function render_settings_page(): void {
-        echo get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-security-facts-page');
+        include MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-security-facts-page.php';
     }
 
     /**
      * Register settings fields for the security facts
      */
-    public static function register_settings(): void {
+    public static function register_page_settings(): void {
+        // Carousel Title Field
+        register_setting('media-wolf-settings', 'media_wolf_facts_carousel_title');
+        add_settings_field('carousel_count', 'Carousel Count', [self::class, 'render_carousel_title_field'], 'media-wolf-security-facts', 'media_wolf_carousel_section');
+
         // Carousel Count Field
         register_setting('media-wolf-settings', 'media_wolf_facts_carousel_count');
-        add_settings_section('media_wolf_carousel_section', 'Carousel Settings', null, 'media-wolf-security-facts');
         add_settings_field('carousel_count', 'Carousel Count', [self::class, 'render_carousel_count_field'], 'media-wolf-security-facts', 'media_wolf_carousel_section');
+
+        add_settings_section('media_wolf_carousel_section', 'Carousel Settings', null, 'media-wolf-security-facts');
 
         // Import Sample Data Field
         register_setting('media-wolf-settings', 'media_wolf_facts_import_sample_data');
@@ -62,34 +74,40 @@ class Security_Facts implements PluginComponentInterface {
         // Handle import on save
         if (get_option('media_wolf_facts_import_sample_data') === 'yes') {
             self::import_security_facts();
-            update_option('media_wolf_facts_import_sample_data', 'no'); // Reset after import
+            update_option('media_wolf_facts_import_sample_data', 'no');
         }
     }
 
     // Enqueue JS and CSS assets for the carousel
     public static function enqueue_assets(): void {
+        $is_dev = strpos(home_url(), 'localhost') !== false || strpos(home_url(), 'staging') !== false;
+        $file_suffix = $is_dev ? '' : '.min';
+    
         // Enqueue Owl Carousel CSS and JS from CDN
         wp_enqueue_style('owl-carousel-css', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css');
         wp_enqueue_style('owl-carousel-theme-css', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css');
         wp_enqueue_script('owl-carousel-js', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js', array('jquery'), null, true);
-        
-        // Enqueue custom CSS and JS from plugin assets folder
-        wp_enqueue_style('security-facts-carousel-css', MEDIA_WOLF_PLUGIN_PATH . 'assets/security-facts/style.css');
-        wp_enqueue_script('security-facts-carousel-js', MEDIA_WOLF_PLUGIN_PATH . 'assets/security-facts/script.js', array('jquery', 'owl-carousel-js'), null, true);
-    }   
 
+        wp_enqueue_style('media-wolf-security-facts', MEDIA_WOLF_PLUGIN_PATH . "/assets/css/security-facts$file_suffix.css");
+    }
+
+    /**
+     * Display a list of security facts
+     * 
+     * @param int $count Number of facts to display
+     * @return void
+     */
     public static function display_security_facts_list($count = 1) {
         $facts = get_posts([
             'post_type' => 'security_facts',
-            'posts_per_page' => intval($count),
+            'posts_per_page' => $count,
             'orderby' => 'rand'
         ]);
-    
-        if (!empty($facts)) {
-            include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/security-facts/security-facts-list.php';
-        } else {
-            echo 'No Security Facts To Display';
-        }
+        if (empty($facts)): return; endif;
+        
+        ob_start();
+        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/security-facts/security-facts-list.php';
+        return ob_get_clean();
     }
     
     public static function display_security_facts_carousel() {
@@ -99,11 +117,16 @@ class Security_Facts implements PluginComponentInterface {
             'orderby' => 'rand'
         ]);
     
-        if (!empty($facts)) {
-            include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/security-facts/security-facts-carousel.php';
-        } else {
-            echo 'No Security Facts To Display';
-        }
+        if (empty($facts)): return; endif;
+
+        ob_start();
+        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/security-facts/carousel.php';
+        return ob_get_clean();
+    }
+
+    public static function render_carousel_title_field(): void {
+        $value = get_option('media_wolf_facts_carousel_title', "Interesting Cyber Security Facts");
+        echo '<input type="text" name="media_wolf_facts_carousel_title" value="' . esc_attr($value) . '" />';
     }
 
     public static function render_carousel_count_field(): void {
@@ -120,11 +143,11 @@ class Security_Facts implements PluginComponentInterface {
     }
 
     private static function import_security_facts() {
-        $json_file = plugin_dir_path(__FILE__) . '/../json/security-facts.json';
+        $json_file = MEDIA_WOLF_PLUGIN_DIR . 'json/security-facts.json';
 
         // Check if the file exists
         if (!file_exists($json_file)) {
-            return new \WP_Error('file_not_found', 'The security-facts.json file was not found.');
+            return new WP_Error('file_not_found', 'The security-facts.json file was not found.');
         }
         
         // Get the contents of the file
@@ -133,7 +156,7 @@ class Security_Facts implements PluginComponentInterface {
 
         // Error handling for JSON decode errors
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return new \WP_Error('json_decode_error', 'Error decoding the JSON file.');
+            return new WP_Error('json_decode_error', 'Error decoding the JSON file.');
         }
 
         foreach ($facts as $fact) {

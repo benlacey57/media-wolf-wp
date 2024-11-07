@@ -8,7 +8,7 @@ class WooCommerce_Customisations implements PluginComponentInterface {
     public static function init(): void {
         // Admin
         // add_action('init', [self::class, 'register_post_type']);  
-        add_action('admin_init', [self::class, 'register_settings']);
+        add_action('admin_init', [self::class, 'register_page_settings']);
         add_action('admin_menu', [self::class, 'dashboard_menu_link']);
 
         // Assets
@@ -31,7 +31,14 @@ class WooCommerce_Customisations implements PluginComponentInterface {
      */
     public static function dashboard_menu_link(): void
     {
-        add_submenu_page('media-wolf', 'WooCommerce', 'WooCommerce Customisations', 'manage_options', 'media-wolf-woocommerce', [self::class, 'render_settings_page']);
+        add_submenu_page(
+            'media-wolf', 
+            __('WooCommerce', 'media-wolf'),
+            __('WooCommerce Settings', 'media-wolf'),
+            'manage_options', 
+            'media-wolf-woocommerce', 
+            [self::class, 'render_settings_page']
+        );
     }
 
     /**
@@ -48,8 +55,8 @@ class WooCommerce_Customisations implements PluginComponentInterface {
     /**
      * Render the WooCommerce customizations settings page.
      */
-    public static function render_woocommerce_settings(): void {
-        echo get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-woocommerce-page');
+    public static function render_settings_page(): void {
+        include MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-woocommerce-page.php';
     }
 
     /**
@@ -111,6 +118,13 @@ class WooCommerce_Customisations implements PluginComponentInterface {
         }, 10, 3);
     }
 
+    public static function add_custom_email_template($email_heading, $email) {
+        if (!is_a($email, 'WC_Custom_Email')) return;
+        ob_start();
+        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/woocommerce/custom-email-template.php';
+        echo ob_get_clean();
+    }    
+
     /**
      * Customize the cart and checkout pages.
      */
@@ -157,4 +171,5 @@ class WooCommerce_Customisations implements PluginComponentInterface {
                 WC()->cart->apply_coupon(sanitize_text_field($_GET['apply_coupon']));
             endif;
         });
+    }
 }
