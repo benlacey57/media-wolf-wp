@@ -19,10 +19,16 @@ if (!defined('MEDIA_WOLF_PLUGIN_DIR')) {
     define('MEDIA_WOLF_PLUGIN_DIR', plugin_dir_path(__FILE__));
 }
 
+// Include Interfaces
+require_once MEDIA_WOLF_PLUGIN_DIR . 'interfaces/interface-plugin-component.php';
+
+// Include Classes
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-settings.php';
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-content-restriction.php';
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-security-facts.php';
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-woocommerce.php';
+require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-login.php';
+require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-social-sharing.php';
 
 // Autoload post type classes from the post-types directory
 add_action('init', function () {
@@ -41,7 +47,9 @@ register_deactivation_hook(__FILE__, ['MediaWolf\\Settings', 'deactivate']);
 function media_wolf_init() {
     MediaWolf\Settings::init();
     MediaWolf\Content_Restriction::init();
-    MediaWolf\Security_Facts::init();
-    // MediaWolf\WooCommerce_Customisations::init();
+    // MediaWolf\Security_Facts::init();
+    MediaWolf\WooCommerce::init();
+    MediaWolf\Login::init();
+    MediaWolf\Social_Sharing::init();
 }
 add_action('plugins_loaded', 'media_wolf_init');
