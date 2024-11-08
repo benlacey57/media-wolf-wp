@@ -143,7 +143,7 @@ class Social_Sharing implements PluginComponentInterface
     }
   }
 
-  private static function get_share_url($platform, $url, $title, $location)
+  public static function get_share_url($platform, $url, $title, $location)
   {
     $utm_source = 'social_' . $platform;
     $utm_medium = 'share_button';
