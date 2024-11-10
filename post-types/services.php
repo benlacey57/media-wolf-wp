@@ -13,6 +13,10 @@ class Services implements PostTypeInterface {
         add_action('add_meta_boxes', [self::class, 'add_meta_boxes']);
         add_filter("manage_" . self::POST_TYPE . "_posts_columns", [self::class, 'customize_admin_columns']);
         add_action("manage_" . self::POST_TYPE . "_posts_custom_column", [self::class, 'populate_admin_columns'], 10, 2);
+
+        // Linked Products
+        add_filter('the_content', [self::class, 'display_linked_products']);
+        add_filter('template_include', [self::class, 'load_custom_templates']);
     }
 
     public static function register(): void {
@@ -101,6 +105,46 @@ class Services implements PostTypeInterface {
         if ($column === 'price') {
             echo esc_html(get_field('price', $post_id));
         }
+    }
+
+    /**
+     * Display linked products on single service template.
+     *
+     * @param string $content
+     * @return string
+     */
+    public static function display_linked_products($content): string
+    {
+        if (is_singular('services') && is_main_query()) {
+            $linked_products = get_field('linked_products');
+
+            if ($linked_products) {
+                ob_start();
+                include MEDIA_WOLF_PLUGIN_DIR . '/templates/services/linked-products.php';
+                $products_content = ob_get_clean();
+
+                $content .= $products_content;
+            }
+        }
+
+        return $content;
+    }
+
+    /**
+     * Load custom templates for the Services post type.
+     *
+     * @param string $template
+     * @return string
+     */
+    public static function load_custom_templates($template): string
+    {
+        if (is_post_type_archive('services')) {
+            $custom_template = MEDIA_WOLF_PLUGIN_DIR . '/templates/services/archive.php';
+        } elseif (is_singular('services')) {
+            $custom_template = MEDIA_WOLF_PLUGIN_DIR . '/templates/services/single.php';
+        }
+
+        return file_exists($custom_template) ? $custom_template : $template;
     }
 }
 
