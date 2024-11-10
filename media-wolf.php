@@ -24,6 +24,15 @@ require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-content-restriction.php';
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-security-facts.php';
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-woocommerce.php';
 
+// Autoload post type classes from the post-types directory
+add_action('init', function () {
+    $post_type_dir = MEDIA_WOLF_PLUGIN_PATH . 'post-types/';
+    
+    foreach (glob($post_type_dir . 'class-*.php') as $file) {
+        require_once $file;
+    }
+});
+
 // Activation & deactivation hooks
 register_activation_hook(__FILE__, ['MediaWolf\\Settings', 'activate']);
 register_deactivation_hook(__FILE__, ['MediaWolf\\Settings', 'deactivate']);
