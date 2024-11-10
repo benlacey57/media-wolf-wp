@@ -12,6 +12,8 @@ class Services implements PluginComponentInterface
         add_action('init', [ServicesPostType::class, 'register_post_type']);
         add_action('admin_menu', [self::class, 'dashboard_menu_link']);
         add_action('admin_init', [self::class, 'register_page_settings']);
+        add_shortcode('list_services', [self::class, 'list_services_shortcode']);
+        add_shortcode('related_services', [self::class, 'related_services_shortcode']);
     }
 
     public static function register_page_settings(): void
@@ -62,4 +64,22 @@ class Services implements PluginComponentInterface
 
         return file_exists($custom_template) ? $custom_template : $template;
     }
+
+    public static function list_services_shortcode($atts)
+    {
+        $services = Services::get_all_posts();
+        ob_start();
+        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/services/list.php';
+        return ob_get_clean();
+    }
+
+public static function related_services_shortcode()
+{
+    if (!is_singular('services')) return '';
+
+    $related_services = Services::get_related_services(get_the_ID());
+    ob_start();
+    include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/services/related.php';
+    return ob_get_clean();
+}
 }
