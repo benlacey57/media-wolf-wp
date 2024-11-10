@@ -50,4 +50,4 @@ class SecurityFacts implements PostTypeInterface {
     }
 }
 
-SecurityFacts::
+SecurityFacts::init();
