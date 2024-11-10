@@ -26,6 +26,36 @@ class Services
         return self::POST_TYPE;
     }
 
+public static function register_acf_fields(): void
+{
+    if (function_exists('acf_add_local_field_group')) {
+        acf_add_local_field_group([
+            'key' => 'group_related_products',
+            'title' => 'Related Products',
+            'fields' => [
+                [
+                    'key' => 'field_related_products',
+                    'label' => 'Related Products',
+                    'name' => 'related_products',
+                    'type' => 'relationship',
+                    'post_type' => ['product'],
+                    'filters' => ['search', 'post_type'],
+                    'return_format' => 'id',
+                ]
+            ],
+            'location' => [
+                [
+                    [
+                        'param' => 'post_type',
+                        'operator' => '==',
+                        'value' => self::POST_TYPE,
+                    ],
+                ],
+            ],
+        ]);
+    }
+}
+
     /**
      * Retrieve all posts for the Services post type.
      *
