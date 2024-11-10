@@ -25,19 +25,63 @@ class Services implements PostTypeInterface {
             'has_archive' => true,
         ]);
     }
-
-    public static function register_acf_fields(): void {
+    
+    /**
+     * Register ACF fields for linking products.
+     */
+    public static function register_acf_fields(): void
+    {
         if (function_exists('acf_add_local_field_group')) {
             acf_add_local_field_group([
-                'key' => 'group_service_details',
-                'title' => 'Service Details',
+                'key' => 'group_services_linked_products',
+                'title' => 'Linked Products',
                 'fields' => [
-                    ['key' => 'field_service_description', 'label' => 'Service Description', 'name' => 'service_description', 'type' => 'textarea'],
-                    ['key' => 'field_price', 'label' => 'Price', 'name' => 'price', 'type' => 'number'],
+                    [
+                        'key' => 'field_linked_products',
+                        'label' => 'Linked Products',
+                        'name' => 'linked_products',
+                        'type' => 'relationship',
+                        'post_type' => ['product'],
+                        'filters' => ['search'],
+                        'min' => 0,
+                        'max' => 5,
+                        'return_format' => 'id',
+                    ],
                 ],
-                'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => self::POST_TYPE]]],
+                'location' => [
+                    [
+                        [
+                            'param' => 'post_type',
+                            'operator' => '==',
+                            'value' => 'services',
+                        ],
+                    ],
+                ],
             ]);
         }
+    }
+
+    /**
+     * Display linked products on single service template.
+     *
+     * @param string $content
+     * @return string
+     */
+    public static function display_linked_products($content): string
+    {
+        if (is_singular('services') && is_main_query()) {
+            $linked_products = get_field('linked_products');
+
+            if ($linked_products) {
+                ob_start();
+                include MEDIA_WOLF_PLUGIN_DIR . '/templates/services/linked-products.php';
+                $products_content = ob_get_clean();
+
+                $content .= $products_content;
+            }
+        }
+
+        return $content;
     }
 
     public static function add_meta_boxes(): void {
