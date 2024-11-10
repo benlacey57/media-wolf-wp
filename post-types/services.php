@@ -2,150 +2,106 @@
 
 namespace MediaWolf\PostTypes;
 
-use MediaWolf\PostTypeInterface;
+class Services
+{
+    const POST_TYPE = 'services';
 
-class Services implements PostTypeInterface {
-    const POST_TYPE = 'service';
-
-    public static function init(): void {
-        self::register();
-        add_action('acf/init', [self::class, 'register_acf_fields']);
-        add_action('add_meta_boxes', [self::class, 'add_meta_boxes']);
-        add_filter("manage_" . self::POST_TYPE . "_posts_columns", [self::class, 'customize_admin_columns']);
-        add_action("manage_" . self::POST_TYPE . "_posts_custom_column", [self::class, 'populate_admin_columns'], 10, 2);
-
-        // Linked Products
-        add_filter('the_content', [self::class, 'display_linked_products']);
-        add_filter('template_include', [self::class, 'load_custom_templates']);
-    }
-
-    public static function register(): void {
+    public static function register_post_type(): void
+    {
         register_post_type(self::POST_TYPE, [
-            'label' => __('Services', 'media-wolf'),
+            'labels' => [
+                'name' => __('Services', 'media-wolf'),
+                'singular_name' => __('Service', 'media-wolf')
+            ],
             'public' => true,
+            'has_archive' => true,
             'show_in_rest' => true,
             'supports' => ['title', 'editor', 'thumbnail'],
-            'menu_icon' => 'dashicons-hammer',
-            'has_archive' => true,
+            'rewrite' => ['slug' => self::POST_TYPE],
         ]);
     }
-    
-    /**
-     * Register ACF fields for linking products.
-     */
-    public static function register_acf_fields(): void
+
+    public static function get_post_type(): string
     {
-        if (function_exists('acf_add_local_field_group')) {
-            acf_add_local_field_group([
-                'key' => 'group_services_linked_products',
-                'title' => 'Linked Products',
-                'fields' => [
-                    [
-                        'key' => 'field_linked_products',
-                        'label' => 'Linked Products',
-                        'name' => 'linked_products',
-                        'type' => 'relationship',
-                        'post_type' => ['product'],
-                        'filters' => ['search'],
-                        'min' => 0,
-                        'max' => 5,
-                        'return_format' => 'id',
-                    ],
-                ],
-                'location' => [
-                    [
-                        [
-                            'param' => 'post_type',
-                            'operator' => '==',
-                            'value' => 'services',
-                        ],
-                    ],
-                ],
-            ]);
-        }
+        return self::POST_TYPE;
     }
 
     /**
-     * Display linked products on single service template.
+     * Retrieve all posts for the Services post type.
      *
-     * @param string $content
-     * @return string
+     * @param int $limit
+     * @return array|null
      */
-    public static function display_linked_products($content): string
+    public static function get_all_posts(int $limit = -1): ?array
     {
-        if (is_singular('services') && is_main_query()) {
-            $linked_products = get_field('linked_products');
+        $query = new \WP_Query([
+            'post_type' => self::POST_TYPE,
+            'posts_per_page' => $limit,
+            'post_status' => 'publish',
+        ]);
 
-            if ($linked_products) {
-                ob_start();
-                include MEDIA_WOLF_PLUGIN_DIR . '/templates/services/linked-products.php';
-                $products_content = ob_get_clean();
-
-                $content .= $products_content;
-            }
-        }
-
-        return $content;
-    }
-
-    public static function add_meta_boxes(): void {
-        add_meta_box('service_info', 'Service Info', [self::class, 'render_service_meta_box'], self::POST_TYPE, 'side', 'default');
-    }
-
-    public static function render_service_meta_box($post): void {
-        echo '<p>' . __('Service Price: ', 'media-wolf') . get_field('price', $post->ID) . '</p>';
-    }
-
-    public static function customize_admin_columns(array $columns): array {
-        $columns['price'] = __('Price', 'media-wolf');
-        return $columns;
-    }
-
-    public static function populate_admin_columns(string $column, int $post_id): void {
-        if ($column === 'price') {
-            echo esc_html(get_field('price', $post_id));
-        }
+        return $query->have_posts() ? $query->posts : null;
     }
 
     /**
-     * Display linked products on single service template.
+     * Retrieve posts by meta key and value.
      *
-     * @param string $content
-     * @return string
+     * @param string $meta_key
+     * @param mixed $meta_value
+     * @param int $limit
+     * @return array|null
      */
-    public static function display_linked_products($content): string
+    public static function get_posts_by_meta(string $meta_key, $meta_value, int $limit = -1): ?array
     {
-        if (is_singular('services') && is_main_query()) {
-            $linked_products = get_field('linked_products');
+        $query = new \WP_Query([
+            'post_type' => self::POST_TYPE,
+            'meta_key' => $meta_key,
+            'meta_value' => $meta_value,
+            'posts_per_page' => $limit,
+            'post_status' => 'publish',
+        ]);
 
-            if ($linked_products) {
-                ob_start();
-                include MEDIA_WOLF_PLUGIN_DIR . '/templates/services/linked-products.php';
-                $products_content = ob_get_clean();
-
-                $content .= $products_content;
-            }
-        }
-
-        return $content;
+        return $query->have_posts() ? $query->posts : null;
     }
 
     /**
-     * Load custom templates for the Services post type.
+     * Retrieve posts by taxonomy term.
      *
-     * @param string $template
-     * @return string
+     * @param string $taxonomy
+     * @param mixed $term
+     * @param int $limit
+     * @return array|null
      */
-    public static function load_custom_templates($template): string
+    public static function get_posts_by_taxonomy(string $taxonomy, $term, int $limit = -1): ?array
     {
-        if (is_post_type_archive('services')) {
-            $custom_template = MEDIA_WOLF_PLUGIN_DIR . '/templates/services/archive.php';
-        } elseif (is_singular('services')) {
-            $custom_template = MEDIA_WOLF_PLUGIN_DIR . '/templates/services/single.php';
-        }
+        $query = new \WP_Query([
+            'post_type' => self::POST_TYPE,
+            'tax_query' => [
+                [
+                    'taxonomy' => $taxonomy,
+                    'field' => is_numeric($term) ? 'term_id' : 'slug',
+                    'terms' => $term,
+                ]
+            ],
+            'posts_per_page' => $limit,
+            'post_status' => 'publish',
+        ]);
 
-        return file_exists($custom_template) ? $custom_template : $template;
+        return $query->have_posts() ? $query->posts : null;
+    }
+
+    /**
+     * Retrieve related products for a specific service post.
+     *
+     * @param int $post_id
+     * @return array|null
+     */
+    public static function get_related_products(int $post_id): ?array
+    {
+        // Ensure ACF is active
+        if (!function_exists('get_field')) return null;
+
+        $products = get_field('related_products', $post_id);
+        return !empty($products) ? $products : null;
     }
 }
-
-Services::init();
