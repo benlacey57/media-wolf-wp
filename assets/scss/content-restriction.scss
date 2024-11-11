@@ -1,6 +1,6 @@
 // content-restriction.scss
 
-@import 'variables';
+@import '_variables';
 
 .restricted-content-notice {
     background-color: lighten($secondary, 40%);

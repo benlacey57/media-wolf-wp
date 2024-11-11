@@ -10,24 +10,34 @@ class Login implements PluginComponentInterface {
         // Customize error message
         add_filter('login_errors', [self::class, 'custom_login_error_message']);
 
-        // Customize login logo
-        add_action('login_enqueue_scripts', [self::class, 'customize_login_logo']);
+        // Customise login logo
+        if(function_exists('customize_login_logo')) {
+            add_action('login_enqueue_scripts', [self::class, 'customize_login_logo']);
+        }
 
-        // Enqueue custom login styles and background
-        add_action('login_enqueue_scripts', [self::class, 'enqueue_custom_login_styles']);
+        // Enqueue custom login styles
+        if(function_exists('enqueue_assets')) {
+            add_action('login_enqueue_scripts', [self::class, 'enqueue_assets']);
+        }
 
-        // Customize login logo URL and title
+        if (function_exists('enqueue_admin_assets')) {
+            add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_assets']);
+        }
+
+        // Customise login logo URL and title
         add_filter('login_headerurl', [self::class, 'custom_login_url']);
         add_filter('login_headertext', [self::class, 'custom_login_title']);
 
         // Custom redirect after login
-        // add_filter('login_redirect', [self::class, 'custom_login_redirect'], 10, 3);
+        if(function_exists('custom_login_redirect')) {
+            add_filter('login_redirect', [self::class, 'custom_login_redirect'], 10, 3);
+        }
 
-        // Remove "Remember Me" and set custom cookie expiration
+        // Make this an admin option: Remove "Remember Me" and set custom cookie expiration
         add_filter('login_form_bottom', [self::class, 'remove_remember_me']);
         add_filter('auth_cookie_expiration', [self::class, 'custom_cookie_expiration']);
 
-        // Add custom footer text
+        // Make this an admin option: Add custom footer text
         add_action('login_footer', [self::class, 'custom_footer_text']);
     }
 

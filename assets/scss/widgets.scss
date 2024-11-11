@@ -1,7 +1,16 @@
 // widgets.scss
 
-@import 'variables';
+@import '_variables';
 
+/* Primary Sidebar */
+#secondary {
+    h2 {
+        font-size: 1.3rem;
+        color: #444;
+    }
+}
+
+/* Global Widgets */
 .widget {
     padding: $padding-medium;
     margin: $padding-small;
@@ -9,9 +18,9 @@
     border: 1px solid $secondary;
     border-radius: $border-radius;
     
-    h3 {
-        font-size: 1.2em;
-        color: $primary;
+    h2, h3, h4 {
+        font-size: 1.3em;
+        color: #444;
         margin-bottom: $padding-small;
     }
 }

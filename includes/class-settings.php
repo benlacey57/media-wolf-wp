@@ -40,7 +40,7 @@ class Settings implements PluginComponentInterface {
      * Render the main settings page.
      */
     public static function render_settings_page(): void{
-        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/admin/admin-settings-page.php';
+        include MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-settings-page.php';
     }
 
     /**

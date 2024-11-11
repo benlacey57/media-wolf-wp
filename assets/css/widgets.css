@@ -1,3 +1,10 @@
+/* Primary Sidebar */
+#secondary h2 {
+  font-size: 1.3rem;
+  color: #444;
+}
+
+/* Global Widgets */
 .widget {
   padding: 16px;
   margin: 8px;
@@ -5,8 +12,8 @@
   border: 1px solid hsl(0, 0%, 25.1%);
   border-radius: 4px;
 }
-.widget h3 {
-  font-size: 1.2em;
-  color: hsl(37.4, 67.6%, 57.6%);
+.widget h2, .widget h3, .widget h4 {
+  font-size: 1.3em;
+  color: #444;
   margin-bottom: 8px;
 }

@@ -12,8 +12,13 @@ class Content_Restriction implements PluginComponentInterface {
         add_action('admin_menu', [self::class, 'dashboard_menu_link']);
 
         // Assets
-        add_action('wp_enqueue_scripts', [self::class, 'enqueue_assets']);
-        // add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_assets']);
+        if(function_exists('enqueue_assets')) {
+            add_action('wp_enqueue_scripts', [self::class, 'enqueue_assets']);
+        }
+
+        if (function_exists('enqueue_admin_assets')) {
+            add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_assets']);
+        }
 
         add_shortcode('restrict_content', [self::class, 'restrict_content_shortcode']);
         add_filter('the_content', [self::class, 'restrict_post_content_filter']);

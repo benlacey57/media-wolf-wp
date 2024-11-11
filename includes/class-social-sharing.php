@@ -9,11 +9,21 @@ class Social_Sharing implements PluginComponentInterface
 
   public static function init(): void
   {
-    add_action('admin_menu', [self::class, 'add_settings_page']);
-    add_action('admin_init', [self::class, 'register_settings']);
-    add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
+    // Admin menu link
+    add_action('admin_menu', [self::class, 'dashboard_menu_link']);
+
+    // Register settings
+    add_action('admin_init', [self::class, 'register_page_settings']);
+
+    // Enqueue assets
+    if (function_exists('enqueue_assets')) {
+      add_action('wp_enqueue_scripts', [self::class, 'enqueue_assets']);
+    }
+
+    // Add sharing buttons to content
     add_action('the_content', [self::class, 'display_sharing_buttons']);
   }
+
 
   /**
    * Add the main settings page and sub-pages.
@@ -35,7 +45,7 @@ class Social_Sharing implements PluginComponentInterface
    */
   public static function render_settings_page(): void
   {
-    include MEDIA_WOLF_PLUGIN_DIR . '/admin/admin-social-sharing-page.php';
+    include MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-social-sharing-page.php';
   }
 
   /**
@@ -83,6 +93,7 @@ class Social_Sharing implements PluginComponentInterface
       $locations = [
         'top' => 'Top of Page',
         'bottom' => 'Bottom of Page',
+        'top_and_bottom' => 'Top and Bottom of Page',
         'fixed_left' => 'Fixed Left',
         'fixed_right' => 'Fixed Right',
       ];
@@ -104,7 +115,7 @@ class Social_Sharing implements PluginComponentInterface
     $is_dev = strpos(home_url(), 'localhost') !== false || strpos(home_url(), 'staging') !== false;
     $file_suffix = $is_dev ? '' : '.min';
 
-    wp_enqueue_style('media-wolf-social-sharing', MEDIA_WOLF_PLUGIN_PATH . "/assets/css/social-sharing$file_suffix.css");
+    wp_enqueue_style('media-wolf-social-sharing', MEDIA_WOLF_PLUGIN_PATH . "assets/css/social-sharing$file_suffix.css");
   }
 
   // Include the sharing buttons partial
@@ -112,7 +123,7 @@ class Social_Sharing implements PluginComponentInterface
   {
     // Get settings
     $enabled_post_types = get_option('media_wolf_social_post_types', []);
-    $display_location = get_option('media_wolf_social_display_location', 'bottom');
+    $display_location = get_option('media_wolf_social_display_location', 'top');
     $platforms = get_option('media_wolf_social_platforms', []);
 
     // Check if sharing is enabled for this post type
@@ -131,14 +142,17 @@ class Social_Sharing implements PluginComponentInterface
       return $buttons . $content;
     } elseif ($display_location === 'bottom') {
       return $content . $buttons;
+    } elseif ($display_location === 'top_and_bottom') {
+        return $buttons . $content . $buttons;
     } elseif ($display_location === 'fixed_left' || $display_location === 'fixed_right') {
       $buttons = '<div class="media-wolf-social-fixed ' . esc_attr($display_location) . '">';
-      $buttons .= $buttons;
+        $buttons .= $buttons;
       $buttons .= '</div>';
 
       add_action('wp_footer', function () use ($buttons) {
         echo $buttons;
       });
+
       return $content;
     }
   }
@@ -164,7 +178,7 @@ class Social_Sharing implements PluginComponentInterface
       case 'email':
         return 'mailto:?subject=' . rawurlencode($title) . '&body=' . rawurlencode($url) . '%0A%0A&utm_source=' . $utm_source . '&utm_medium=' . $utm_medium . '&utm_campaign=' . $utm_campaign . '&utm_content=' . $utm_content;
       default:
-        return $url;
+        return '';
     }
   }
 }
