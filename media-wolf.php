@@ -35,9 +35,10 @@ require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-security-enhancements.php';
 add_action('init', function () {
     $post_type_dir = MEDIA_WOLF_PLUGIN_PATH . 'post-types/';
     
-    foreach (glob($post_type_dir . 'class-*.php') as $file) {
+    foreach (glob($post_type_dir . 'class-*.php') as $file):
+        error_log("Including post type file: $file");
         require_once $file;
-    }
+    endforeach;
 });
 
 // Activation & deactivation hooks

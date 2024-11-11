@@ -3,6 +3,8 @@
 namespace MediaWolf;
 
 use MediaWolf\PluginComponentInterface;
+use MediaWolf\PostTypes\SecurityFacts;
+
 class Security_Facts implements PluginComponentInterface {
 
     public static function init(): void {
@@ -21,17 +23,14 @@ class Security_Facts implements PluginComponentInterface {
     }
 
     public static function register_post_type(): void {
-        register_post_type('security_facts', [
-            'labels' => [
-                'name' => 'Security Facts',
-                'singular_name' => 'Security Fact'
-            ],
-            'public' => false,
-            'show_ui' => true,
-            'show_in_rest' => true,
-            'can_export' => true,
-            'supports' => ['title', 'editor', 'custom-fields'],
-        ]);
+        if(
+            !class_exists('MediaWolf\PostTypes\SecurityFacts') || 
+            !method_exists('MediaWolf\PostTypes\SecurityFacts', 'register_post_type')
+        ) {
+            return;
+        }
+        
+        SecurityFacts::register_post_type();
     }
 
     /**
@@ -106,7 +105,7 @@ class Security_Facts implements PluginComponentInterface {
         if (empty($facts)): return; endif;
         
         ob_start();
-        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/security-facts/security-facts-list.php';
+        include MEDIA_WOLF_PLUGIN_DIR . 'templates/security-facts/security-facts-list.php';
         return ob_get_clean();
     }
     
@@ -120,7 +119,7 @@ class Security_Facts implements PluginComponentInterface {
         if (empty($facts)): return; endif;
 
         ob_start();
-        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/security-facts/carousel.php';
+        include MEDIA_WOLF_PLUGIN_DIR . 'templates/security-facts/carousel.php';
         return ob_get_clean();
     }
 

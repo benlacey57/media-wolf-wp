@@ -133,7 +133,7 @@ class Social_Sharing implements PluginComponentInterface
 
     // Include the sharing buttons partial
     ob_start();
-    include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/social-sharing/buttons.php';
+    include MEDIA_WOLF_PLUGIN_DIR . 'templates/social-sharing/buttons.php';
     $buttons = ob_get_clean();
 
 

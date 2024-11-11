@@ -61,7 +61,7 @@ class Content_Restriction implements PluginComponentInterface {
         $restricted_content_block = get_option('media_wolf_restricted_content_block');
     
         ob_start();
-        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/front-end-notice.php';
+        include MEDIA_WOLF_PLUGIN_DIR . 'templates/content-restriction/front-end-notice.php';
         return ob_get_clean();
     }
 
@@ -71,7 +71,7 @@ class Content_Restriction implements PluginComponentInterface {
             $register_url = esc_url(get_permalink(get_option('media_wolf_register_page')));
     
             ob_start();
-            include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/shortcode-message.php';
+            include MEDIA_WOLF_PLUGIN_DIR . 'templates/content-restriction/shortcode-message.php';
             return ob_get_clean();
         }
     

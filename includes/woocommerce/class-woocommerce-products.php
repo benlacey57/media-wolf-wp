@@ -11,7 +11,7 @@ class WooCommerce_Products {
             'title'    => __('Custom Tab', 'woocommerce'),
             'priority' => 30,
             'callback' => function() {
-                return get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/woocommerce/tabs/custom-tab-1');
+                return get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'templates/woocommerce/tabs/custom-tab-1');
             }
         );
 
@@ -19,7 +19,7 @@ class WooCommerce_Products {
             'title'    => __('Custom Tab 2', 'woocommerce'),
             'priority' => 40,
             'callback' => function() {
-                return get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/woocommerce/tabs/custom-tab-2');
+                return get_template_part(MEDIA_WOLF_PLUGIN_DIR . 'templates/woocommerce/tabs/custom-tab-2');
             }
         );
         return $tabs;

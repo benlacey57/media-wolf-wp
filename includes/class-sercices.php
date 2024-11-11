@@ -69,7 +69,7 @@ class Services implements PluginComponentInterface
     {
         $services = Services::get_all_posts();
         ob_start();
-        include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/services/list.php';
+        include MEDIA_WOLF_PLUGIN_DIR . 'templates/services/list.php';
         return ob_get_clean();
     }
 
@@ -79,7 +79,7 @@ public static function related_services_shortcode()
 
     $related_services = Services::get_related_services(get_the_ID());
     ob_start();
-    include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/services/related.php';
+    include MEDIA_WOLF_PLUGIN_DIR . 'templates/services/related.php';
     return ob_get_clean();
 }
 }

@@ -57,7 +57,7 @@ class WooCommerce_Emails implements PluginComponentInterface {
     public static function customize_email_templates(): void {
       add_filter('woocommerce_email_order_meta', function($order, $sent_to_admin, $plain_text) {
           ob_start();
-          include MEDIA_WOLF_PLUGIN_DIR . 'includes/partials/woocommerce/custom-email-template.php';
+          include MEDIA_WOLF_PLUGIN_DIR . 'templates/woocommerce/custom-email-template.php';
           echo ob_get_clean();
       }, 10, 3);
   }
