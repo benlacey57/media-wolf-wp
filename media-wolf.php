@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Media Wolf
  * Description: A custom plugin with features for content restriction, member content, and security facts.
- * Version: 1.0
+ * Version: 1.5
  * Author: Ben Lacey
  * Requires PHP: 8.2
  */
