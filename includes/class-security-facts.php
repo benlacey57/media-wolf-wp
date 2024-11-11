@@ -146,7 +146,7 @@ class Security_Facts implements PluginComponentInterface {
 
         // Check if the file exists
         if (!file_exists($json_file)) {
-            return new WP_Error('file_not_found', 'The security-facts.json file was not found.');
+            return new WP_Error('file_not_found', 'The security facts.json file was not found.');
         }
         
         // Get the contents of the file

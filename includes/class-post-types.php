@@ -9,7 +9,7 @@ class PostTypes implements PluginComponentInterface
         add_action('admin_menu', [self::class, 'register_submenu']);
     }
 
-    public static function register_submenu(): void
+    public static function dashboard_menu_link(): void
     {
         add_submenu_page(
             'media-wolf',
@@ -21,6 +21,18 @@ class PostTypes implements PluginComponentInterface
         );
     }
 
+    public static function render_settings_page(): void
+    {
+        include MEDIA_WOLF_PLUGIN_DIR . '/admin/admin-post-types-page.php';
+    }
+
+    public static function register_page_settings(): void
+    {
+        $post_types = self::get_available_post_types();
+        foreach ($post_types as $post_type) {
+            register_setting('media_wolf_post_types', "enable_{$post_type}");
+        }
+    }
     public static function render_post_types_page(): void
     {
         $post_types = self::get_available_post_types();

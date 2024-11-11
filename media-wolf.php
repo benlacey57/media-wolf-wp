@@ -36,7 +36,6 @@ add_action('init', function () {
     $post_type_dir = MEDIA_WOLF_PLUGIN_PATH . 'post-types/';
     
     foreach (glob($post_type_dir . 'class-*.php') as $file):
-        error_log("Including post type file: $file");
         require_once $file;
     endforeach;
 });
