@@ -1,12 +1,27 @@
 <?php
 
-namespace MediaWolf;
+namespace MediaWolf\Includes;
+
+use MediaWolf\Interfaces\PluginComponentInterface;
 
 class PostTypes implements PluginComponentInterface
 {
+    const COMPONENT = 'post-types';
+
     public static function init(): void
     {
-        add_action('admin_menu', [self::class, 'register_submenu']);
+        // Admin
+        add_action('admin_init', [self::class, 'register_settings']);
+        add_action('admin_menu', [self::class, 'dashboard_menu_link']);
+
+        // Assets
+        if(function_exists('enqueue_assets')) {
+            add_action('wp_enqueue_scripts', [self::class, 'enqueue_assets']);
+        }
+
+        if (function_exists('enqueue_admin_assets')) {
+            add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_assets']);
+        }
     }
 
     public static function dashboard_menu_link(): void
@@ -16,55 +31,40 @@ class PostTypes implements PluginComponentInterface
             __('Post Types', 'media-wolf'),
             __('Post Types', 'media-wolf'),
             'manage_options',
-            'media-wolf-post-types',
-            [self::class, 'render_post_types_page']
+            'media-wolf',
+            [self::class, 'render_settings_page']
         );
     }
 
     public static function render_settings_page(): void
     {
-        include MEDIA_WOLF_PLUGIN_DIR . '/admin/admin-post-types-page.php';
+        include MEDIA_WOLF_PLUGIN_DIR . '/admin/admin-' . self::COMPONENT . '-page.php';
     }
 
-    public static function register_page_settings(): void
+    public static function register_settings(): void
     {
-        $post_types = self::get_available_post_types();
+        $post_types = self::get_post_types();
         foreach ($post_types as $post_type) {
             register_setting('media_wolf_post_types', "enable_{$post_type}");
         }
     }
-    public static function render_post_types_page(): void
+
+    public static function get_component_template_dir(): string
     {
-        $post_types = self::get_available_post_types();
-        ?>
-        <div class="wrap">
-            <h1><?php _e('Manage Post Types', 'media-wolf'); ?></h1>
-            <form method="post" action="options.php">
-                <?php
-                settings_fields('media_wolf_post_types');
-                foreach ($post_types as $post_type) {
-                    $enabled = get_option("enable_{$post_type}", true);
-                    ?>
-                    <label>
-                        <input type="checkbox" name="enable_<?php echo esc_attr($post_type); ?>" <?php checked($enabled); ?>>
-                        <?php echo esc_html($post_type); ?>
-                    </label><br>
-                    <?php
-                }
-                submit_button(__('Save Changes', 'media-wolf'));
-                ?>
-            </form>
-        </div>
-        <?php
+        return MEDIA_WOLF_PLUGIN_DIR . 'templates/' . self::COMPONENT . '/';
     }
 
-    public static function get_available_post_types(): array
+    public static function get_post_types(): array
     {
         $post_types = [];
-        $files = glob(MEDIA_WOLF_PLUGIN_DIR . '/post-types/class-*.php');
-        foreach ($files as $file) {
+        $files = glob(MEDIA_WOLF_PLUGIN_DIR . '/post-types/*.php');
+
+        if(!$files) { return $post_types; }
+
+        foreach ($files as $file):
             $post_types[] = basename($file, '.php');
-        }
+        endforeach;
+
         return $post_types;
     }
 }

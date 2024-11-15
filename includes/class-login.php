@@ -1,19 +1,14 @@
 <?php
 
-namespace MediaWolf;
+namespace MediaWolf\Includes;
 
-use MediaWolf\PluginComponentInterface;
+use MediaWolf\Interfaces\PluginComponentInterface;
 
-class Login implements PluginComponentInterface {
+class CustomLogin implements PluginComponentInterface {
 
     public static function init(): void {
-        // Customize error message
-        add_filter('login_errors', [self::class, 'custom_login_error_message']);
-
-        // Customise login logo
-        if(function_exists('customize_login_logo')) {
-            add_action('login_enqueue_scripts', [self::class, 'customize_login_logo']);
-        }
+        add_action('admin_menu', [self::class, 'dashboard_menu_link']);
+        add_action('admin_init', [self::class, 'register_settings']);
 
         // Enqueue custom login styles
         if(function_exists('enqueue_assets')) {
@@ -24,14 +19,15 @@ class Login implements PluginComponentInterface {
             add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_assets']);
         }
 
+        // Customize error message
+        add_filter('login_errors', [self::class, 'custom_login_error_message']);
+
         // Customise login logo URL and title
-        add_filter('login_headerurl', [self::class, 'custom_login_url']);
+        add_filter('login_logo', [self::class, 'custom_logo']);
         add_filter('login_headertext', [self::class, 'custom_login_title']);
 
         // Custom redirect after login
-        if(function_exists('custom_login_redirect')) {
-            add_filter('login_redirect', [self::class, 'custom_login_redirect'], 10, 3);
-        }
+        add_filter('login_redirect', [self::class, 'custom_login_redirect'], 10, 3);        
 
         // Make this an admin option: Remove "Remember Me" and set custom cookie expiration
         add_filter('login_form_bottom', [self::class, 'remove_remember_me']);
@@ -44,16 +40,51 @@ class Login implements PluginComponentInterface {
     /**
      * Register empty methods to satisfy the interface requirements
      */
-    public static function register_page_settings(): void {
-        // Not used in Login class
+    public static function register_settings(): void {
+        register_setting('media-wolf-login-settings', 'media_wolf_logo');
+        register_setting('media-wolf-login-settings', 'media_wolf_disable_remember_me');
+        register_setting('media-wolf-login-settings', 'media_wolf_footer_text');
+        register_setting('media-wolf-login-settings', 'media_wolf_background_image');
+        register_setting('media-wolf-login-settings', 'media_wolf_background_color');
     }
 
     public static function dashboard_menu_link(): void {
-        // Not used in Login class
+        add_submenu_page(
+            'media-wolf',
+            __('Login', 'media-wolf'),
+            __('Login', 'media-wolf'),
+            'manage_options',
+            'media-wolf-login',
+            [self::class, 'render_settings_page']
+        );
+    }
+
+    public static function get_component_includes_dir(): string
+    {
+        return MEDIA_WOLF_PLUGIN_DIR . 'includes/' . self::COMPONENT . '/';
+    }
+
+    public static function get_component_template_dir(): string
+    {
+        return MEDIA_WOLF_PLUGIN_DIR . 'templates/' . self::COMPONENT . '/';
+    }
+
+    /**
+     * Enqueue CSS for social sharing buttons.
+     */
+    public static function enqueue_assets(): void
+    {
+        $is_dev = strpos(home_url(), 'localhost') !== false || strpos(home_url(), 'staging') !== false;
+        $file_suffix = $is_dev ? '' : '.min';
+
+        wp_enqueue_style(
+            'media-wolf-' . self::COMPONENT,
+            MEDIA_WOLF_PLUGIN_PATH . "assets/css/" . self::COMPONENT . "$file_suffix.css"
+        );
     }
 
     public static function render_settings_page(): void {
-        // Not used in Login class
+        include MEDIA_WOLF_PLUGIN_DIR . '/admin/admin-login-page.php';
     }
 
     /**
@@ -66,7 +97,7 @@ class Login implements PluginComponentInterface {
     /**
      * Customize the login logo to use the plugin's logo.
      */
-    public static function customize_login_logo(): void {
+    public static function customise_login_logo(): void {
         ?>
         <style type="text/css">
             .login h1 a {
@@ -80,24 +111,7 @@ class Login implements PluginComponentInterface {
     }
 
     /**
-     * Enqueue custom styles for the login page.
-     */
-    public static function enqueue_assets(): void {
-        $is_dev = strpos(home_url(), 'localhost') !== false || strpos(home_url(), 'staging') !== false;
-        $file_suffix = $is_dev ? '' : '.min';
-    
-        wp_enqueue_style('media-wolf-login', MEDIA_WOLF_PLUGIN_PATH . "/assets/css/login$file_suffix.css");
-    }   
-
-    /**
-     * Customize the URL for the login logo link.
-     */
-    public static function custom_login_url(): string {
-        return home_url();
-    }
-
-    /**
-     * Customize the title attribute for the login logo link.
+     * Customise the title attribute for the login logo link.
      */
     public static function custom_login_title(): string {
         return get_bloginfo('name');
@@ -138,3 +152,5 @@ class Login implements PluginComponentInterface {
         echo '<p style="text-align: center; color: #666;">' . esc_html__('Welcome to Media Wolf Security! Contact support if you need assistance.', 'media-wolf') . '</p>';
     }
 }
+
+CustomLogin::init();

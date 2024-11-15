@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWolf;
+namespace MediaWolf\Interfaces;
 
 interface PluginComponentInterface {
     /**
@@ -11,7 +11,7 @@ interface PluginComponentInterface {
     /**
      * Register settings for the component.
      */
-    public static function register_page_settings(): void;
+    public static function register_settings(): void;
 
     /**
      * Add the plugin settings link in the WP Dashboard.
@@ -19,9 +19,14 @@ interface PluginComponentInterface {
     public static function dashboard_menu_link(): void;
 
     /**
+     * Get the directory path for the component templates.
+     */
+    public static function get_component_template_dir(): string;
+
+    /**
      * Render the settings page for the component (if applicable).
      *
      * @return void
      */
-    public static function render_settings_page(): void;
+    public static function render_settings_page();
 }

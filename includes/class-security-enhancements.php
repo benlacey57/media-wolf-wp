@@ -1,25 +1,44 @@
 <?php
 
-namespace MediaWolf;
+namespace MediaWolf\Includes;
 
-use MediaWolf\PluginComponentInterface;
+use MediaWolf\Interfaces\PluginComponentInterface;
 
 class SecurityEnhancements implements PluginComponentInterface
 {
+  const COMPONENT = 'security-enhancements';
 
   /**
    * Initialize security actions and hooks.
    */
   public static function init(): void
   {
-    // Core security features
-    add_action('init', [self::class, 'disable_file_editing']);
-    add_action('init', [self::class, 'disable_plugin_management']);
-    add_action('init', [self::class, 'disable_wordpress_version']);
-    add_action('init', [self::class, 'remove_wordpress_version_query_strings']);
-    add_action('wp_head', [self::class, 'apply_content_security_policy']);
-    add_action('admin_init', [self::class, 'disable_xml_rpc']);
+    add_action('admin_menu', [self::class, 'dashboard_menu_link']);
+    add_action('admin_init', [self::class, 'register_page_settings']);
 
+    add_action('init', [self::class, 'remove_wordpress_version_query_strings']);
+
+    // Core security features
+    if (get_option('apply_csp_headers')) {
+      add_action('wp_head', [self::class, 'apply_content_security_policy']);
+    }
+
+    if (get_option('disable_xml_rpc')) {
+      add_action('init', [self::class, 'disable_xml_rpc']);
+    }
+
+    if(get_option('disable_wordpress_version')) {
+      add_action('init', [self::class, 'disable_wordpress_version']);
+    }
+
+    if(get_option('disable_plugin_management')) {
+      add_action('init', [self::class, 'disable_plugin_management']);
+    }
+
+    if(get_option('disable_file_editing')) {
+      add_action('init', [self::class, 'disable_file_editing']);
+    }
+    
     // Apply settings-based security options
     self::apply_security_options();
   }
@@ -34,7 +53,7 @@ class SecurityEnhancements implements PluginComponentInterface
       __('Security Options', 'media-wolf'),
       __('Security Options', 'media-wolf'),
       'manage_options',
-      'media-wolf-security-options',
+      'media-wolf',
       [self::class, 'render_settings_page']
     );
   }
@@ -42,11 +61,12 @@ class SecurityEnhancements implements PluginComponentInterface
   /**
    * Register settings for the security options.
    */
-  public static function register_page_settings(): void
+  public static function register_settings(): void
   {
     register_setting('media-wolf-security-settings', 'disable_file_editing');
     register_setting('media-wolf-security-settings', 'disable_plugin_management');
     register_setting('media-wolf-security-settings', 'disable_wordpress_version');
+    register_setting('media-wolf-security-settings', 'disable_xml_rpc');
     register_setting('media-wolf-security-settings', 'apply_csp_headers');
   }
 
@@ -55,8 +75,13 @@ class SecurityEnhancements implements PluginComponentInterface
    */
   public static function render_settings_page(): void
   {
-    include MEDIA_WOLF_PLUGIN_DIR . '/admin/admin-security-enhancements-page.php';
+    include MEDIA_WOLF_PLUGIN_DIR . '/admin/admin-' . self::COMPONENT . '-page.php';
   }
+
+    public static function get_component_template_dir(): string
+    {
+        return MEDIA_WOLF_PLUGIN_DIR . 'templates/' . self::COMPONENT . '/';
+    }
 
   /**
    * Disable file editing within the WordPress dashboard.
@@ -127,33 +152,6 @@ class SecurityEnhancements implements PluginComponentInterface
     header("Content-Security-Policy: $csp_string");
   }
 
-
-  /**
-   * Apply security options based on settings.
-   */
-  public static function apply_security_options(): void
-  {
-    // File editing
-    if (get_option('disable_file_editing')) {
-      self::disable_file_editing();
-    }
-
-    // Plugin management
-    if (get_option('disable_plugin_management')) {
-      self::disable_plugin_management();
-    }
-
-    // Remove WordPress version
-    if (get_option('disable_wordpress_version')) {
-      self::disable_wordpress_version();
-    }
-
-    // CSP Headers
-    if (get_option('apply_csp_headers')) {
-      add_action('wp_head', [self::class, 'apply_content_security_policy']);
-    }
-  }
-
   /**
    * Render a checkbox for each setting in the admin settings page.
    *
@@ -166,3 +164,5 @@ class SecurityEnhancements implements PluginComponentInterface
     echo '<input type="checkbox" name="' . esc_attr($name) . '" value="1" ' . checked(1, $value, false) . ' />';
   }
 }
+
+SecurityEnhancements::init();

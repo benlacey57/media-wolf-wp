@@ -2,7 +2,10 @@
 
 namespace MediaWolf\PostTypes;
 
-class Enquiries
+use MediaWolf\Interfaces\PostTypeInterface;
+
+
+class EnquiriesPostType implements PostTypeInterface
 {
     const POST_TYPE = 'enquiries';
 

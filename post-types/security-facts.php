@@ -2,9 +2,16 @@
 
 namespace MediaWolf\PostTypes;
 
-class SecurityFacts
+use MediaWolf\Interfaces\PostTypeInterface;
+
+class SecurityFactsPostType implements PostTypeInterface
 {
     const POST_TYPE = 'security_facts';
+
+    public static function init(): void
+    {
+        add_action('init', [self::class, 'register_post_type']);
+    }
 
     public static function register_post_type(): void
     {

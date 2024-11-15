@@ -1,11 +1,12 @@
 <?php
 
-namespace MediaWolf;
+namespace MediaWolf\Includes;
 
-use MediaWolf\PluginComponentInterface;
+use MediaWolf\Interfaces\PluginComponentInterface;
 
 class Social_Sharing implements PluginComponentInterface
 {
+  const COMPONENT = 'social-sharing';
 
   public static function init(): void
   {
@@ -13,7 +14,7 @@ class Social_Sharing implements PluginComponentInterface
     add_action('admin_menu', [self::class, 'dashboard_menu_link']);
 
     // Register settings
-    add_action('admin_init', [self::class, 'register_page_settings']);
+    add_action('admin_init', [self::class, 'register_settings']);
 
     // Enqueue assets
     if (function_exists('enqueue_assets')) {
@@ -32,7 +33,7 @@ class Social_Sharing implements PluginComponentInterface
   {
     add_menu_page(
       __('Social Sharing', 'media-wolf'),
-      __('Social Share Settings', 'media-wolf'),
+      __('Social Sharing', 'media-wolf'),
       'manage_options',
       'media-wolf',
       [self::class, 'render_settings_page'],
@@ -51,13 +52,11 @@ class Social_Sharing implements PluginComponentInterface
   /**
    * Register settings for the Social Sharing page.
    */
-  public static function register_page_settings(): void
+  public static function register_settings(): void
   {
-    register_setting('media_wolf_social_sharing_settings', 'media_wolf_social_platforms');
-    register_setting('media_wolf_social_sharing_settings', 'media_wolf_social_post_types');
-    register_setting('media_wolf_social_sharing_settings', 'media_wolf_social_display_location');
-
-    add_settings_section('general_settings', __('General Settings', 'media-wolf'), null, 'media-wolf-social-sharing');
+    register_setting('media-wolf-social-sharing-settings', 'media_wolf_social_platforms');
+    register_setting('media-wolf-social-sharing-settings', 'media_wolf_social_post_types');
+    register_setting('media-wolf-social-sharing-settings', 'media_wolf_social_display_location');
 
     // Social platforms
     add_settings_field('social_platforms', __('Social Platforms', 'media-wolf'), function () {
@@ -79,7 +78,7 @@ class Social_Sharing implements PluginComponentInterface
 
     // Post types
     add_settings_field('social_post_types', __('Enable on Post Types', 'media-wolf'), function () {
-      $post_types = get_post_types(['public' => true], 'objects');
+      $post_types = PostTypes::get_post_types();
       $selected_post_types = get_option('media_wolf_social_post_types', []);
 
       foreach ($post_types as $post_type) {
@@ -114,9 +113,20 @@ class Social_Sharing implements PluginComponentInterface
   {
     $is_dev = strpos(home_url(), 'localhost') !== false || strpos(home_url(), 'staging') !== false;
     $file_suffix = $is_dev ? '' : '.min';
-
-    wp_enqueue_style('media-wolf-social-sharing', MEDIA_WOLF_PLUGIN_PATH . "assets/css/social-sharing$file_suffix.css");
+    
+    wp_enqueue_style(
+      'media-wolf-' . self::COMPONENT, 
+      MEDIA_WOLF_PLUGIN_PATH . "assets/css/" . self::COMPONENT . "$file_suffix.css"
+    );
   }
+
+  /**
+     * Get the directory path for the component templates.
+     */
+    public static function get_component_template_dir(): string
+    {
+        return MEDIA_WOLF_PLUGIN_DIR . 'templates/' . self::COMPONENT;
+    }
 
   // Include the sharing buttons partial
   public static function display_sharing_buttons($content)
@@ -133,9 +143,8 @@ class Social_Sharing implements PluginComponentInterface
 
     // Include the sharing buttons partial
     ob_start();
-    include MEDIA_WOLF_PLUGIN_DIR . 'templates/social-sharing/buttons.php';
+    include self::get_component_template_dir() . '/buttons.php';
     $buttons = ob_get_clean();
-
 
     // Add buttons based on display location
     if ($display_location === 'top') {
@@ -182,3 +191,5 @@ class Social_Sharing implements PluginComponentInterface
     }
   }
 }
+
+Social_Sharing::init();

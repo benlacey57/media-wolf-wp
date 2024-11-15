@@ -3,7 +3,7 @@
   <form method="post" action="options.php">
     <?php
     settings_fields('media-wolf-security-settings');
-    do_settings_sections('media-wolf-security-options');
+    do_settings_sections('media-wolf-security-settings');
     submit_button();
     ?>
   </form>

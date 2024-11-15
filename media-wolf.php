@@ -30,6 +30,9 @@ require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-woocommerce.php';
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-social-sharing.php';
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-login.php';
 require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-security-enhancements.php';
+require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-subpages.php';
+require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-post-types.php';
+require_once MEDIA_WOLF_PLUGIN_DIR . 'includes/class-services.php';
 
 // Autoload post type classes from the post-types directory
 add_action('init', function () {
@@ -43,15 +46,3 @@ add_action('init', function () {
 // Activation & deactivation hooks
 register_activation_hook(__FILE__, ['MediaWolf\\Settings', 'activate']);
 register_deactivation_hook(__FILE__, ['MediaWolf\\Settings', 'deactivate']);
-
-// Initialise plugin
-function media_wolf_init() {
-    MediaWolf\Settings::init();
-    MediaWolf\Content_Restriction::init();
-    MediaWolf\Security_Facts::init();
-    MediaWolf\WooCommerce::init();
-    MediaWolf\Social_Sharing::init();
-    MediaWolf\Login::init();
-    MediaWolf\SecurityEnhancements::init();
-}
-add_action('plugins_loaded', 'media_wolf_init');

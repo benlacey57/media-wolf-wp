@@ -4,16 +4,16 @@ namespace MediaWolf\PostTypes;
 
 use MediaWolf\Interfaces\PostTypeInterface;
 
-class ServicesPostType implements PostTypeInterface
+class LocationsPostType implements PostTypeInterface
 {
-    const POST_TYPE = 'services';
+    const POST_TYPE = 'locations';
 
     public static function register_post_type(): void
     {
         register_post_type(self::POST_TYPE, [
             'labels' => [
-                'name' => __('Services', 'media-wolf'),
-                'singular_name' => __('Service', 'media-wolf')
+                'name' => __('Locations', 'media-wolf'),
+                'singular_name' => __('Location', 'media-wolf')
             ],
             'public' => true,
             'has_archive' => true,
@@ -32,18 +32,39 @@ class ServicesPostType implements PostTypeInterface
     {
         if (function_exists('acf_add_local_field_group')) {
             acf_add_local_field_group([
-                'key' => 'group_related_products',
-                'title' => 'Related Products',
+                'key' => 'group_location_details',
+                'title' => 'Location Details',
                 'fields' => [
                     [
-                        'key' => 'field_related_products',
-                        'label' => 'Related Products',
-                        'name' => 'related_products',
-                        'type' => 'relationship',
-                        'post_type' => ['product'],
-                        'filters' => ['search', 'post_type'],
-                        'return_format' => 'id',
-                    ]
+                        'key' => 'field_location_address',
+                        'label' => 'Address',
+                        'name' => 'address',
+                        'type' => 'text',
+                    ],
+                    [
+                        'key' => 'field_location_phone',
+                        'label' => 'Phone',
+                        'name' => 'phone',
+                        'type' => 'text',
+                    ],
+                    [
+                        'key' => 'field_location_email',
+                        'label' => 'Email',
+                        'name' => 'email',
+                        'type' => 'email',
+                    ],
+                    [
+                        'key' => 'field_location_hours',
+                        'label' => 'Hours',
+                        'name' => 'hours',
+                        'type' => 'textarea',
+                    ],
+                    [
+                        'key' => 'field_location_map',
+                        'label' => 'Map',
+                        'name' => 'map',
+                        'type' => 'url',
+                    ],
                 ],
                 'location' => [
                     [
@@ -56,7 +77,7 @@ class ServicesPostType implements PostTypeInterface
                 ],
             ]);
         }
-    }
+    }  
 
     /**
      * Retrieve all posts for the Services post type.

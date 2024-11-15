@@ -1,16 +1,18 @@
 <?php
-namespace MediaWolf;
 
-use MediaWolf\PluginComponentInterface;
+namespace MediaWolf\Includes;
+
+use MediaWolf\Interfaces\PluginComponentInterface;
 
 class Settings implements PluginComponentInterface {
+    const COMPONENT = 'settings';
 
     /**
      * Initialize the settings.
      */
     public static function init(): void {
         add_action('admin_menu', [self::class, 'dashboard_menu_link']);
-        add_action('admin_init', [self::class, 'register_page_settings']);
+        add_action('admin_init', [self::class, 'register_settings']);
     }
 
     /**
@@ -30,7 +32,7 @@ class Settings implements PluginComponentInterface {
     /**
      * Register settings fields for each sub-page.
      */
-    public static function register_page_settings(): void {
+    public static function register_settings(): void {
         // General settings
         register_setting('media-wolf-settings', 'media_wolf_logo');
         register_setting('media-wolf-settings', 'media_wolf_favicon');
@@ -60,4 +62,11 @@ class Settings implements PluginComponentInterface {
         wp_enqueue_style('media-wolf-admin', MEDIA_WOLF_PLUGIN_URL . 'assets/css/dashboard.css');
         wp_enqueue_script('media-wolf-admin', MEDIA_WOLF_PLUGIN_URL . 'assets/js/dashboard.js');
     }
+
+    public static function get_component_template_dir(): string
+    {
+        return MEDIA_WOLF_PLUGIN_DIR . 'templates/' . self::COMPONENT . '/';
+    }
 }
+
+Settings::init();

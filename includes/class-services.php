@@ -2,21 +2,28 @@
 
 namespace MediaWolf;
 
-use MediaWolf\PostTypes\Services as ServicesPostType;
-use MediaWolf\PluginComponentInterface;
+use MediaWolf\PostTypes\ServicesPostType;
+use MediaWolf\Interfaces\PluginComponentInterface;
 
 class Services implements PluginComponentInterface
 {
+    const COMPONENT = 'services';
+
     public static function init(): void
     {
         add_action('init', [ServicesPostType::class, 'register_post_type']);
         add_action('admin_menu', [self::class, 'dashboard_menu_link']);
         add_action('admin_init', [self::class, 'register_page_settings']);
+
         add_shortcode('list_services', [self::class, 'list_services_shortcode']);
         add_shortcode('related_services', [self::class, 'related_services_shortcode']);
     }
 
-    public static function register_page_settings(): void
+    public static function register_post_type(): void {
+        ServicesPostType::register_post_type();
+    }
+
+    public static function register_settings(): void
     {
         register_setting('media-wolf-services-settings', 'enable_linked_products');
     }
@@ -35,18 +42,12 @@ class Services implements PluginComponentInterface
 
     public static function render_settings_page(): void
     {
-        ?>
-        <div class="wrap">
-            <h1><?php _e('Services Settings', 'media-wolf'); ?></h1>
-            <form method="post" action="options.php">
-                <?php
-                settings_fields('media-wolf-services-settings');
-                do_settings_sections('media-wolf-services-settings');
-                submit_button();
-                ?>
-            </form>
-        </div>
-        <?php
+        include MEDIA_WOLF_PLUGIN_DIR . 'admin/admin-services-page.php';
+    }
+
+    public static function get_component_template_dir(): string
+    {
+        return MEDIA_WOLF_PLUGIN_DIR . 'templates/' . self::COMPONENT . '/';
     }
 
     public static function enqueue_assets(): void
@@ -64,22 +65,6 @@ class Services implements PluginComponentInterface
 
         return file_exists($custom_template) ? $custom_template : $template;
     }
-
-    public static function list_services_shortcode($atts)
-    {
-        $services = Services::get_all_posts();
-        ob_start();
-        include MEDIA_WOLF_PLUGIN_DIR . 'templates/services/list.php';
-        return ob_get_clean();
-    }
-
-public static function related_services_shortcode()
-{
-    if (!is_singular('services')) return '';
-
-    $related_services = Services::get_related_services(get_the_ID());
-    ob_start();
-    include MEDIA_WOLF_PLUGIN_DIR . 'templates/services/related.php';
-    return ob_get_clean();
 }
-}
+
+Services::init();
